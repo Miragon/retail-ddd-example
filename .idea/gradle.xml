@@ -19,9 +19,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/utils" />
+            <option value="$PROJECT_DIR$/services" />
+            <option value="$PROJECT_DIR$/services/hello-service" />
+            <option value="$PROJECT_DIR$/services/utils" />
           </set>
         </option>
       </GradleProjectSettings>

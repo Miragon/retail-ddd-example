@@ -5,13 +5,20 @@ package buildsrc.convention
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
+    // Classes annotated with @Configuration, @Controller, @RestController, @Service or @Repository are automatically
+    // opened
+    // https://kotlinlang.org/docs/reference/compiler-plugins.html#spring-support
+    kotlin("plugin.spring")
+
     // Apply the Kotlin JVM plugin to add support for Kotlin in JVM projects.
     kotlin("jvm")
-}
 
-kotlin {
-    // Use a specific Java version to make it easier to work in different environments.
-    jvmToolchain(21)
+    // Allows to package executable jar or war archives, run Spring Boot applications, and use the dependency management
+    // https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/
+    id("org.springframework.boot")
+
+    // This plugin enables the spring dependency management
+    id("io.spring.dependency-management")
 }
 
 tasks.withType<Test>().configureEach {

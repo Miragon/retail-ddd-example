@@ -6,10 +6,16 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain {
+        languageVersion.set(
+            JavaLanguageVersion.of(libs.versions.jdk.get())
+        )
+    }
 }
 
 dependencies {
-    // Add a dependency on the Kotlin Gradle plugin, so that convention plugins can apply it.
     implementation(libs.kotlinGradlePlugin)
+    implementation(libs.kotlinAllOpenPlugin)
+    implementation(libs.springBootGradlePlugin)
+    implementation(libs.springDependencyManagementPlugin)
 }
