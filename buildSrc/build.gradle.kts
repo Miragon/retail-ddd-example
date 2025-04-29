@@ -17,6 +17,7 @@ java {
 dependencies {
     implementation(libs.kotlinGradlePlugin)
     implementation(libs.kotlinAllOpenPlugin)
+    implementation(libs.kotlinLogging)
     implementation(libs.springBootGradlePlugin)
     implementation(libs.springDependencyManagementPlugin)
 }
