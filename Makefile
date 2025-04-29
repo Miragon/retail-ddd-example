@@ -18,20 +18,14 @@ JAR_FILE := services/hello-service/build/libs/*.jar
 IMAGE_NAME := hello-service
 
 # Targets
-.PHONY: all build dockerize run check-jar check-image check-java
+.PHONY: all build dockerize run check-jar check-image check-java-available check-docker-available
 
-all: check-java build dockerize run
+all: check-java-available check-docker-available build dockerize run
 
-build: check-java
-	@if [ -n "$(JAVA_HOME_FOR_VERSION)" ]; then \
-		echo "Building with Java $(EXPECTED_JAVA_MAJOR) (JAVA_HOME=$(JAVA_HOME_FOR_VERSION))"; \
-		JAVA_HOME=$(JAVA_HOME_FOR_VERSION) $(GRADLE_CMD) clean bootJar; \
-	else \
-		echo "Building with current system Java (no JAVA_HOME override)"; \
-		$(GRADLE_CMD) clean bootJar; \
-	fi
+build: check-java-available
+	JAVA_HOME=$(JAVA_HOME_FOR_VERSION) $(GRADLE_CMD) clean bootJar
 
-check-jar:
+check-jar: check-java-available
 	@if ls $(JAR_FILE) 1> /dev/null 2>&1; then \
 		echo "JAR file found."; \
 	else \
@@ -39,7 +33,7 @@ check-jar:
 		$(MAKE) build; \
 	fi
 
-check-image:
+check-image: check-docker-available
 	@if docker image inspect $(IMAGE_NAME) > /dev/null 2>&1; then \
 		echo "Docker image '$(IMAGE_NAME)' already exists."; \
 	else \
@@ -47,25 +41,28 @@ check-image:
 		$(MAKE) dockerize; \
 	fi
 
-dockerize: check-jar
+dockerize: check-jar check-docker-available
 	docker build -t $(IMAGE_NAME) services/hello-service
 
-run: check-image
+run: check-image check-docker-available
 	docker run -p 8080:8080 $(IMAGE_NAME)
 
-check-java:
-	@echo "Checking Java version (expected: $(EXPECTED_JAVA_MAJOR))..."
-	@JAVA_VERSION=$$(java -version 2>&1 | awk -F[\".] '/version/ {print $$2}'); \
-	if [ "$$JAVA_VERSION" -ne $(EXPECTED_JAVA_MAJOR) ]; then \
-		if [ -n "$(JAVA_HOME_FOR_VERSION)" ]; then \
-			echo "Current Java version ($$JAVA_VERSION) does not match, but a correct Java $(EXPECTED_JAVA_MAJOR) installation was found."; \
-		else \
-			echo "Wrong Java version detected: $$JAVA_VERSION"; \
-			echo "Expected Java $(EXPECTED_JAVA_MAJOR)."; \
-			echo "No matching JVM found automatically."; \
-			echo "Build may fail. Please install Java $(EXPECTED_JAVA_MAJOR)."; \
-			exit 1; \
-		fi \
+check-java-available:
+	@if [ -z "$(JAVA_HOME_FOR_VERSION)" ]; then \
+		echo "ERROR: Java $(EXPECTED_JAVA_MAJOR) not found on this machine."; \
+		echo "Please install the correct Java version."; \
+		exit 1; \
 	else \
-		echo "Correct Java version detected: $$JAVA_VERSION"; \
+		echo "Using Java $(EXPECTED_JAVA_MAJOR) at $(JAVA_HOME_FOR_VERSION)"; \
 	fi
+
+check-docker-available:
+	@if ! command -v docker >/dev/null 2>&1; then \
+		echo "ERROR: Docker is not installed or not in PATH."; \
+		exit 1; \
+	fi
+	@if ! docker info >/dev/null 2>&1; then \
+		echo "ERROR: Docker daemon is not running."; \
+		exit 1; \
+	fi
+	@echo "Docker is available and running."
