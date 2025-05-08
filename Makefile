@@ -20,7 +20,7 @@ IMAGE_NAME := hello-service
 # Targets
 .PHONY: all build dockerize run check-jar check-image check-java-available check-docker-available
 
-all: check-java-available check-docker-available build dockerize run
+all: check-java-available check-docker-available build dockerize
 
 build: check-java-available
 	JAVA_HOME=$(JAVA_HOME_FOR_VERSION) $(GRADLE_CMD) clean bootJar

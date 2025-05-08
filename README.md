@@ -1,8 +1,13 @@
 # Fullstack Example
 
-Build project using Gradle and run it by Docker.
+Build project using Gradle and build Docker images for each service.
 ``` bash
 make all
+```
+
+Run image
+``` bash
+make run
 ```
 
 ## Container Engine: Docker
