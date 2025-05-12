@@ -2,12 +2,17 @@
 
 Build project using Gradle and build Docker images for each service.
 ``` bash
-make all
+make build-images
 ```
 
-Run image
+Run docker images locally:
 ``` bash
 make run
+```
+
+Run image on local Kubernetes cluster:
+``` bash
+make deploy
 ```
 
 ## Container Engine: Docker

@@ -15,15 +15,40 @@ JAVA_HOME_FOR_VERSION := $(shell /usr/libexec/java_home -v $(EXPECTED_JAVA_MAJOR
 
 # Paths and names
 JAR_FILE := services/hello-service/build/libs/*.jar
-IMAGE_NAME := hello-service
+IMAGE_NAME := hello-service:local
 
 # Targets
-.PHONY: all build dockerize run check-jar check-image check-java-available check-docker-available
+.PHONY: build-images build-project dockerize run check-jar check-image \
+        check-java-available check-docker-available check-kubernetes-local \
+        check-helm deploy
 
-all: check-java-available check-docker-available build dockerize
+#######################
+# Build targets       #
+#######################
 
-build: check-java-available
+build-images: check-java-available check-docker-available build dockerize
+
+build-project: check-java-available
 	JAVA_HOME=$(JAVA_HOME_FOR_VERSION) $(GRADLE_CMD) clean bootJar
+
+dockerize: check-jar check-docker-available
+	docker build -t $(IMAGE_NAME) services/hello-service
+
+run: check-image check-docker-available
+	docker run -p 8080:8080 $(IMAGE_NAME)
+
+deploy: check-image check-kubernetes-local check-helm
+	helm install hello-service ./charts/hello-service
+	@echo ""
+	@echo "-------------------------------------------------------------"
+	@echo "The hello-service is now available at: http://localhost:30080/hello"
+	@echo "Make sure to wait until the service is healthy"
+	@echo "To uninstall the service, run: helm uninstall hello-service"
+	@echo "-------------------------------------------------------------"
+
+#######################
+# Environment checks  #
+#######################
 
 check-jar: check-java-available
 	@if ls $(JAR_FILE) 1> /dev/null 2>&1; then \
@@ -41,11 +66,6 @@ check-image: check-docker-available
 		$(MAKE) dockerize; \
 	fi
 
-dockerize: check-jar check-docker-available
-	docker build -t $(IMAGE_NAME) services/hello-service
-
-run: check-image check-docker-available
-	docker run -p 8080:8080 $(IMAGE_NAME)
 
 check-java-available:
 	@if [ -z "$(JAVA_HOME_FOR_VERSION)" ]; then \
@@ -66,3 +86,31 @@ check-docker-available:
 		exit 1; \
 	fi
 	@echo "Docker is available and running."
+
+check-kubernetes-local:
+	@if ! command -v kubectl >/dev/null 2>&1; then \
+		echo "ERROR: kubectl is not installed or not in PATH."; \
+		exit 1; \
+	fi
+	@if ! kubectl cluster-info >/dev/null 2>&1; then \
+		echo "ERROR: Cannot connect to a Kubernetes cluster."; \
+		exit 1; \
+	fi
+	@context=$$(kubectl config current-context); \
+	echo "Current context: $$context"; \
+	if [ "$$context" != "docker-desktop" ] && [ "$$context" != "minikube" ]; then \
+		echo "WARNING: Current Kubernetes context is not a known local one."; \
+		echo "Activate docker-desktop locally: https://docs.docker.com/desktop/features/kubernetes/"; \
+		echo "To switch to Docker Desktop, run:"; \
+		echo "  kubectl config get-contexts"; \
+		echo "  kubectl config use-context docker-desktop"; \
+	else \
+		echo "Kubernetes is connected to a local cluster ($$context)."; \
+	fi
+
+check-helm:
+	@if ! command -v helm >/dev/null 2>&1; then \
+		echo "ERROR: Helm is not installed or not in PATH."; \
+		exit 1; \
+	fi
+	@echo "Helm is available."
