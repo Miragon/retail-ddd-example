@@ -10,8 +10,34 @@ endif
 # Read expected Java version from gradle/libs.versions.toml
 EXPECTED_JAVA_MAJOR := $(shell grep '^java' gradle/libs.versions.toml | sed 's/[^0-9]*\([0-9]*\).*/\1/')
 
-# Try to find JAVA_HOME for the expected version (macOS way)
-JAVA_HOME_FOR_VERSION := $(shell /usr/libexec/java_home -v $(EXPECTED_JAVA_MAJOR) 2>/dev/null || echo "")
+# Try to find Java home for the expected version in a cross-platform way
+ifeq ($(OS),Windows_NT)
+    # Windows approach
+    JAVA_HOME_FOR_VERSION := $(shell where java 2>/dev/null | head -1 | xargs dirname | xargs dirname)
+else
+    # Unix-like systems (Linux, macOS)
+    # First check SDKMAN if available
+    SDKMAN_DIR := $(HOME)/.sdkman
+    ifneq ($(wildcard $(SDKMAN_DIR)),)
+        # Get the current Java version from SDKman that matches the major version
+        SDKMAN_JAVA_VERSION := $(shell source "$(SDKMAN_DIR)/bin/sdkman-init.sh" && sdk list java | grep "installed" | grep ${EXPECTED_JAVA_MAJOR} | head -1 | awk '{print $$NF}' 2>/dev/null || echo "")
+        ifneq ($(SDKMAN_JAVA_VERSION),)
+            JAVA_HOME_FOR_VERSION := $(shell source "$(SDKMAN_DIR)/bin/sdkman-init.sh" && sdk home java $(SDKMAN_JAVA_VERSION) 2>/dev/null || echo "")
+        endif
+    endif
+
+    # If SDKMAN didn't work or isn't available, try other methods
+    ifeq ($(JAVA_HOME_FOR_VERSION),)
+        # Try macOS specific approach
+        ifeq ($(UNAME_S),Darwin)
+            JAVA_HOME_FOR_VERSION := $(shell /usr/libexec/java_home -v $(EXPECTED_JAVA_MAJOR) 2>/dev/null || echo "")
+        else
+            # Linux approach - try to find from java in PATH
+            JAVA_HOME_FOR_VERSION := $(shell dirname $$(dirname $$(readlink -f $$(which java 2>/dev/null) 2>/dev/null) 2>/dev/null) 2>/dev/null || echo "")
+        endif
+    endif
+endif
+
 
 # Paths and names
 JAR_FILE := services/hello-service/build/libs/*.jar
@@ -26,7 +52,7 @@ IMAGE_NAME := hello-service:local
 # Build targets       #
 #######################
 
-build-images: check-java-available check-docker-available build dockerize
+build-images: check-java-available check-docker-available build-project dockerize
 
 build-project: check-java-available
 	JAVA_HOME=$(JAVA_HOME_FOR_VERSION) $(GRADLE_CMD) clean bootJar
