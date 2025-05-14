@@ -44,6 +44,10 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+# Frontend
+.vite
+node_modules
+
 ### Helm ###
 /charts/**/charts/
 
