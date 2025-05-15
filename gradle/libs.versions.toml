@@ -10,7 +10,7 @@ kotlinxSerializationJSON = "1.7.3"
 kotlinxCoroutines = "1.9.0"
 kotlinLogging = "7.0.6"
 
-springBoot = "3.4.4"
+springBoot = "3.4.5"
 springGradleDependencyManagement = "1.1.7"
 
 [libraries]
