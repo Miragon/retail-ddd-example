@@ -30,6 +30,7 @@ verify-setup: setup-java ## Verify the setup of Java, Docker, Kubernetes, and He
 	@java_major_version=$$($(JAVA_EXECUTABLE) --version 2>/dev/null | awk 'NR == 1 { split($$2, ver, "."); print ver[1] }'); \
 	if [ "$$java_major_version" != "$(EXPECTED_JAVA_MAJOR)" ]; then \
 		echo "ERROR: Make sure to use Java version $(EXPECTED_JAVA_MAJOR). Found: $$java_major_version"; \
+		echo "Hint: Set CUSTOM_JAVA_EXECUTABLE to the correct Java or switch version with SDKMAN."; \
 		exit 1; \
 	else \
 		echo "Java version $$java_major_version matches expected version $(EXPECTED_JAVA_MAJOR)."; \
