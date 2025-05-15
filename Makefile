@@ -50,7 +50,7 @@ verify-setup: setup-java ## Verify the setup of Java, Docker, Kubernetes, and He
 	fi
 
 .PHONY: build
-build: setup-java build-project build-images ## Build the project and create a Docker image.
+build: setup-java build-images ## Build the project and create Docker images.
 
 .PHONY: build-project
 build-project: verify-setup ## Build the project.
