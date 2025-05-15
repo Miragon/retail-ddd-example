@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: PREP / Check out Git repository
         uses: actions/checkout@v4
-      - name: PREP / Install Java and Maven
+      - name: PREP / Install Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
