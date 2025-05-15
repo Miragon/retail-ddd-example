@@ -27,7 +27,7 @@ verify-setup: setup-java ## Verify the setup of Java, Docker, Kubernetes, and He
 		echo "ERROR: java is not installed."; \
 		exit 1; \
 	fi
-	java_major_version=$$($(JAVA_EXECUTABLE) --version 2>&1 | awk 'NR == 1 { split($$2, ver, "."); print ver[1] }'); \
+	@java_major_version=$$($(JAVA_EXECUTABLE) --version 2>/dev/null | awk 'NR == 1 { split($$2, ver, "."); print ver[1] }'); \
 	if [ "$$java_major_version" != "$(EXPECTED_JAVA_MAJOR)" ]; then \
 		echo "ERROR: Make sure to use Java version $(EXPECTED_JAVA_MAJOR). Found: $$java_major_version"; \
 		exit 1; \
