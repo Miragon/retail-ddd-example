@@ -19,7 +19,7 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
 
-      - name: BUILD / Build with Maven
+      - name: BUILD / Build with Gradle
         run: |
           chmod +x ./gradlew
           make build-project
