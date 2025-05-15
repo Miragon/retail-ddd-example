@@ -23,7 +23,7 @@ endif
 
 .PHONY: verify-setup
 verify-setup: setup-java ## Verify the setup of Java, Docker, Kubernetes, and Helm.
-	if [ -z "$(JAVA_EXECUTABLE)" ]; then \
+	@if [ -z "$(JAVA_EXECUTABLE)" ]; then \
 		echo "ERROR: java is not installed."; \
 		exit 1; \
 	fi
