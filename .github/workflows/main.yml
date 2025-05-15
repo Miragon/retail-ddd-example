@@ -22,4 +22,7 @@ jobs:
       - name: BUILD / Build with Maven
         run: |
           chmod +x ./gradlew
+          java -version
+          which java
+          echo $JAVA_HOME
           make build-project
