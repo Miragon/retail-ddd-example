@@ -1,18 +1,19 @@
 # Fullstack Example
 
-Build project using Gradle and build Docker images for each service.
-``` bash
-make build-images
-```
+Use `make help` to see all available commands.
 
-Run docker images locally:
-``` bash
-make run
-```
-
-Run image on local Kubernetes cluster:
-``` bash
-make deploy
+```bash
+Usage:
+  make 
+  help                                    Show this help.
+  setup-java                              Setup the development environment.
+  verify-setup                            Verify the setup of Java, Docker, Kubernetes, and Helm.
+  build                                   Build the project and create Docker images.
+  build-project                           Build the project.
+  build-images                            Create Docker images.
+  run                                     Run the Docker images.
+  deploy                                  Deploy the service to Kubernetes.
+  check-kubernetes-local                  Check if Kubernetes is running locally.
 ```
 
 ## Container Engine: Docker

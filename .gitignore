@@ -46,3 +46,6 @@ bin/
 
 ### Helm ###
 /charts/**/charts/
+
+### direnv ###
+.envrc

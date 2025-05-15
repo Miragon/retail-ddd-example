@@ -1,0 +1,25 @@
+name: Build Application
+
+on:
+  push:
+  pull_request:
+    types: [ opened, reopened ]
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PREP / Check out Git repository
+        uses: actions/checkout@v4
+      - name: PREP / Install Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: BUILD / Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          make build-project
