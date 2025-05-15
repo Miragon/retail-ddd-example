@@ -10,14 +10,12 @@ help:	## Show this help.
 
 .PHONY: setup-java
 setup-java: ## Setup the development environment.
-ifneq ($(CUSTOM_JAVA_EXECUTABLE), "")
+ifdef CUSTOM_JAVA_EXECUTABLE
 	$(eval JAVA_EXECUTABLE := $(CUSTOM_JAVA_EXECUTABLE))
 else ifneq ($(wildcard $(SDKMAN_DIR)),)
-	SDKMAN_JAVA_VERSION := $(shell source "$(SDKMAN_DIR)/bin/sdkman-init.sh" && sdk list java | grep "installed" | grep ${EXPECTED_JAVA_MAJOR} | head -1 | awk '{print $$NF}' 2>/dev/null || echo "")
+	$(eval SDKMAN_JAVA_VERSION := $(shell source "$(SDKMAN_DIR)/bin/sdkman-init.sh" && sdk list java | grep "installed" | grep ${EXPECTED_JAVA_MAJOR} | head -1 | awk '{print $$NF}' 2>/dev/null || echo ""))
 	@echo "Using SDKMAN Java version: $(SDKMAN_JAVA_VERSION)"
-	ifneq ($(SDKMAN_JAVA_VERSION),)
-		$(eval JAVA_EXECUTABLE := $(shell source "$(SDKMAN_DIR)/bin/sdkman-init.sh" && sdk home java $(SDKMAN_JAVA_VERSION) 2>/dev/null || echo ""))
-	endif
+	$(eval JAVA_EXECUTABLE := $(if $(SDKMAN_JAVA_VERSION),$(shell source "$(SDKMAN_DIR)/bin/sdkman-init.sh" && sdk home java $(SDKMAN_JAVA_VERSION) 2>/dev/null || echo ""),))
 else
 	$(eval JAVA_EXECUTABLE := $(shell which java 2>/dev/null || echo ""))
 endif
