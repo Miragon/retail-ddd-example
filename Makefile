@@ -23,6 +23,7 @@ endif
 
 .PHONY: verify-setup
 verify-setup: setup-java ## Verify the setup of Java, Docker, Kubernetes, and Helm.
+	@# Check Java version
 	@if [ -z "$(JAVA_EXECUTABLE)" ]; then \
 		echo "ERROR: java is not installed."; \
 		exit 1; \
@@ -30,23 +31,27 @@ verify-setup: setup-java ## Verify the setup of Java, Docker, Kubernetes, and He
 	@java_major_version=$$($(JAVA_EXECUTABLE) --version 2>/dev/null | awk 'NR == 1 { split($$2, ver, "."); print ver[1] }'); \
 	if [ "$$java_major_version" != "$(EXPECTED_JAVA_MAJOR)" ]; then \
 		echo "ERROR: Make sure to use Java version $(EXPECTED_JAVA_MAJOR). Found: $$java_major_version"; \
-		echo "Hint: Set CUSTOM_JAVA_EXECUTABLE to the correct Java or switch version with SDKMAN."; \
+		echo "	Switch version with SDKMAN or set CUSTOM_JAVA_EXECUTABLE to the correct Java. F.ex. using direnv:"; \
+		echo "	echo 'export CUSTOM_JAVA_EXECUTABLE=~/Library/Java/JavaVirtualMachines/corretto-21.0.7/Contents/Home/bin/java' > .envrc && direnv allow ." ; \
 		exit 1; \
 	else \
 		echo "Java version $$java_major_version matches expected version $(EXPECTED_JAVA_MAJOR)."; \
-	fi; \
-	if ! command -v docker >/dev/null 2>&1; then \
+	fi
+	@# Check Docker
+	@if ! command -v docker >/dev/null 2>&1; then \
 		echo "ERROR: Docker is not installed or not in PATH."; \
 		exit 1; \
-		else \
+	else \
 		echo "Docker is installed."; \
 	fi
-	if ! command -v helm >/dev/null 2>&1; then \
+	@# Check Helm
+	@if ! command -v helm >/dev/null 2>&1; then \
 		echo "ERROR: Helm is not installed or not in PATH."; \
 		exit 1; \
-		else \
+	else \
 		echo "Helm is installed."; \
 	fi
+
 
 .PHONY: build
 build: setup-java build-images ## Build the project and create Docker images.
