@@ -1,0 +1,9 @@
+server:
+  port: 8083
+
+spring:
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: retail-ddd-example.eu.auth0.com

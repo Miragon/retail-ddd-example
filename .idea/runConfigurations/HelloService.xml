@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="HelloService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="fullstack-example.services.hello-service.main" />
+    <module name="retail-ddd-example.services.hello-service.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.miragon.app.App" />
     <extension name="coverage">
       <pattern>

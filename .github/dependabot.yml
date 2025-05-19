@@ -5,13 +5,39 @@ updates:
     directory: "/"
     open-pull-requests-limit: 20
     schedule:
-      interval: weekly
+      interval: monthly
     labels:
       - "Technical Debt"
+
+  # Config for all gradle dependencies
   - package-ecosystem: "gradle"
     directory: "/"
     open-pull-requests-limit: 30
     schedule:
-      interval: weekly
+      interval: monthly
     labels:
       - "Technical Debt"
+    groups:
+      backend-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+          - "minor"
+          - "major"
+
+  # Config for frontend dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "Technical Debt"
+    groups:
+      frontend-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+          - "minor"
+          - "major"
