@@ -5,13 +5,13 @@
 [versions]
 java = "21"
 kotlin = "2.1.20"
-kotlinxDatetime = "0.6.1"
-kotlinxSerializationJSON = "1.7.3"
+kotlinxSerializationJSON = "1.8.1"
+kotlinxDatetime = "0.6.2"
 kotlinxCoroutines = "1.9.0"
 kotlinLogging = "7.0.6"
-
 springBoot = "3.4.4"
 springGradleDependencyManagement = "1.1.7"
+springDocOpenApi = "1.8.0"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -20,12 +20,21 @@ kotlinxSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-j
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinAllOpenPlugin = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
 kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
-
 springBootGradlePlugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 springDependencyManagementPlugin = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springGradleDependencyManagement" }
+springSecurity = { module = 'org.springframework.boot:spring-boot-starter-security', version.ref = "springBoot" }
+springBootWeb = { module = 'org.springframework.boot:spring-boot-starter-web', version.ref = "springBoot" }
+springBootActuator = { module = 'org.springframework.boot:spring-boot-starter-actuator', version.ref = "springBoot" }
+springBootTest = { module = 'org.springframework.boot:spring-boot-starter-test', version.ref = "springBoot" }
+springBootOAuthServer = { module = 'org.springframework.boot:spring-boot-starter-oauth2-resource-server', version.ref = "springBoot" }
+springDoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-ui', version = "2.8.8" }
+jacksonModuleKotlin = { module = 'com.fasterxml.jackson.module:jackson-module-kotlin', version = "2.19.0" }
 
 # Libraries can be bundled together for easier import
 [bundles]
+openApi = ["springDoc", "jacksonModuleKotlin"]
+webService = ["kotlinLogging", "springSecurity", "springBootOAuthServer", "springBootWeb", "springBootActuator"]
+commonTest = ["springBootTest"]
 kotlinxEcosystem = ["kotlinxDatetime", "kotlinxSerialization", "kotlinxCoroutines"]
 
 [plugins]
