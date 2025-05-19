@@ -19,7 +19,8 @@ minikube start
 ## Build Images inside Minikube
 
 ```bash
-minikube image build -t hello-service:local services/hello-service
+cd ..
+minikube image build -t hello-service:local -f services/hello-service/Dockerfile .
 ```
 
 ## Deploy with Helm
