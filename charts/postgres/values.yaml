@@ -4,3 +4,7 @@ postgresql:
     username: "test"
     password: "test"
     database: "test"
+
+  primary:
+    service:
+      type: LoadBalancer
