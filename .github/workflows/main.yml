@@ -22,4 +22,4 @@ jobs:
       - name: BUILD / Build with Gradle
         run: |
           chmod +x ./gradlew
-          make build-project
+          ./gradlew bootJar
