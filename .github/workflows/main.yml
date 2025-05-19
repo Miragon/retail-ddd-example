@@ -2,10 +2,10 @@ name: Build Container & Helm Chart
 
 on:
   push:
-    branches: [ main ]
   pull_request:
     types: [ opened, reopened ]
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
