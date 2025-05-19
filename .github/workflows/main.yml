@@ -24,11 +24,19 @@ jobs:
           cache: gradle
 
       # ──────────────── GENERATE A SINGLE BUILD TAG ───────────────
-      - name: Compute build tag  (YYYY-MMDD-MMSS)
+      - name: Compute build tag  (YYYY-MMDD-HHMMSS)
         id: vars
         run: |
-          TAG=$(date -u '+%Y-%m%d-%H%M%S')
-          echo "TAG=$TAG"          >> "$GITHUB_OUTPUT"
+          Y=$(date -u '+%Y')
+          M=$(date -u '+%-m')
+          D=$(date -u '+%-d')
+          H=$(date -u '+%-H')
+          N=$(date -u '+%-M')
+          S=$(date -u '+%-S')
+          MD=$(( M * 100 + D ))
+          HHMMSS=$(( H * 10000 + N * 100 + S ))
+          echo "TAG_SEMANTIC=${Y}.${MD}.${HHMMSS}" >> "$GITHUB_OUTPUT"
+          echo "TAG=${Y}-${MD}-${HHMMSS}" >> "$GITHUB_OUTPUT"
           echo "Using tag: $TAG"
 
       # ─────────────────────── TESTS ──────────────────────────────
@@ -41,9 +49,6 @@ jobs:
 
       - name: Build Docker image (no push)
         uses: docker/build-push-action@v6
-        env:
-          DOCKER_BUILDKIT: 1
-          BUILDKIT_PROGRESS: plain
         with:
           context: .
           file: services/hello-service/Dockerfile
@@ -51,7 +56,7 @@ jobs:
           push: false
           load: true
           cache-from: type=gha
-          cache-to:   type=gha,mode=max
+          cache-to: type=gha,mode=max
           provenance: false
           sbom: false
 
@@ -64,6 +69,6 @@ jobs:
           helm lint charts/hello-service
           helm package charts/hello-service \
             --destination charts/ \
-            --version      "${{ steps.vars.outputs.TAG }}" \
-            --app-version  "${{ steps.vars.outputs.TAG }}"
-          echo "Chart packaged: charts/hello-service-${{ steps.vars.outputs.TAG }}.tgz"
+            --version "${{ steps.vars.outputs.TAG_SEMANTIC }}" \
+            --app-version "${{ steps.vars.outputs.TAG }}"
+          echo "Chart packaged: hello-service-${{ steps.vars.outputs.TAG }}.tgz"
