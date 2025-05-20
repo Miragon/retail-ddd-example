@@ -1,0 +1,10 @@
+postgresql:
+  auth:
+    postgresPassword: "postgres"
+    username: "test"
+    password: "test"
+    database: "test"
+
+  primary:
+    service:
+      type: LoadBalancer
