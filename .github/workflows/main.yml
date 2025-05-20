@@ -35,11 +35,20 @@ jobs:
           path: build/libs/*.jar
 
       # ──────── GENERATE A SINGLE BUILD TAG ────────
-      - name: Compute build tag  (YYYY-MMDD-HHMMSS)
+      - name: Compute semantic version (YYYY.M.D+<hash>)
         id: vars
         run: |
-          printf "TAG=%s\n" "$(date -u '+%Y-%-m%-d-%-H%M%S')" | tee -a "$GITHUB_OUTPUT"
-          printf "TAG_SEMANTIC=%s\n" "$(date -u '+%Y.%m%d.%H%M%S')" | tee -a "$GITHUB_OUTPUT"
+          # numeric date parts without leading zeros → valid SemVer numerics
+          Y=$(date -u '+%Y')
+          M=$(date -u '+%-m')
+          D=$(date -u '+%-d')
+
+          DATE="${Y}.${M}.${D}"
+          HASH=$(git rev-parse --short=8 "$GITHUB_SHA")
+
+          echo "TAG_SEMANTIC=${DATE}+${HASH}" >> "$GITHUB_OUTPUT"
+          # “+” is illegal in Docker/OCI tags → swap for “-”
+          echo "TAG=${DATE//./-}-${HASH}" >> "$GITHUB_OUTPUT"
 
       # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
