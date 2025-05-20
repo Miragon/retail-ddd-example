@@ -20,12 +20,11 @@ jobs:
         with:
           distribution: corretto
           java-version: '21'
-          cache: gradle                          # works out-of-the-box with the wrapper
+          cache: gradle
 
       # ──────────── BUILD THE JAR ONCE ────────────
       - name: Build JAR with wrapper
-        run: ./gradlew --no-daemon clean bootJar      # or “jar” / “shadowJar” – keep it explicit
-        # bootJar puts the file in build/libs/*.jar
+        run: ./gradlew --no-daemon clean bootJar
 
       # (optional) expose the JAR as a workflow artefact
       - name: Upload JAR artefact
@@ -38,7 +37,6 @@ jobs:
       - name: Compute semantic version (YYYY.M.D+<hash>)
         id: vars
         run: |
-          # numeric date parts without leading zeros → valid SemVer numerics
           Y=$(date -u '+%Y')
           M=$(date -u '+%-m')
           D=$(date -u '+%-d')
@@ -49,6 +47,8 @@ jobs:
           echo "TAG_SEMANTIC=${DATE}+${HASH}" >> "$GITHUB_OUTPUT"
           # “+” is illegal in Docker/OCI tags → swap for “-”
           echo "TAG=${DATE//./-}-${HASH}" >> "$GITHUB_OUTPUT"
+          
+          echo "Semantic version: ${DATE}+${HASH}"
 
       # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
