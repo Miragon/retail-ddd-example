@@ -36,13 +36,15 @@ jobs:
 
           DATE="${Y}.${M}.${D}"
           HASH=$(git rev-parse --short=8 "$GITHUB_SHA")
-
-          echo "TAG_SEMANTIC=${DATE}+${HASH}" >> "$GITHUB_OUTPUT"
-          # “+” is illegal in Docker/OCI tags → swap for “-”
-          echo "TAG=${DATE//./-}-${HASH}" >> "$GITHUB_OUTPUT"
+          
+          TAG_SEMANTIC=${DATE}+${HASH}
+          TAG=${DATE//./-}-${HASH}
           
           echo "Tag: ${TAG}"
           echo "Semantic Tag: ${TAG_SEMANTIC}"
+
+          echo $TAG >> "$GITHUB_OUTPUT"
+          echo $TAG_SEMANTIC >> "$GITHUB_OUTPUT"
 
       # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
