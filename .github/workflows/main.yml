@@ -26,13 +26,6 @@ jobs:
       - name: Build JAR with wrapper
         run: ./gradlew --no-daemon clean bootJar
 
-      # (optional) expose the JAR as a workflow artefact
-      - name: Upload JAR artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-jar
-          path: build/libs/*.jar
-
       # ──────── GENERATE A SINGLE BUILD TAG ────────
       - name: Compute semantic version (YYYY.M.D+<hash>)
         id: vars
@@ -48,7 +41,8 @@ jobs:
           # “+” is illegal in Docker/OCI tags → swap for “-”
           echo "TAG=${DATE//./-}-${HASH}" >> "$GITHUB_OUTPUT"
           
-          echo "Semantic version: ${DATE}+${HASH}"
+          echo "Tag: ${TAG}"
+          echo "Semantic Tag: ${TAG_SEMANTIC}"
 
       # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
