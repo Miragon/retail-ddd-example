@@ -4,46 +4,48 @@ on:
   push:
   pull_request:
     types: [ opened, reopened ]
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # ─────────────────────────── PREP ───────────────────────────
+      # ───────────────────────── PREP ─────────────────────────
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set up Java 21 (Corretto) + Gradle cache
+      - name: Set up JDK 21 (Corretto) + Gradle cache
         uses: actions/setup-java@v4
         with:
           distribution: corretto
           java-version: '21'
-          cache: gradle
+          cache: gradle                          # works out-of-the-box with the wrapper
 
-      # ──────────────── GENERATE A SINGLE BUILD TAG ───────────────
+      # ──────────── BUILD THE JAR ONCE ────────────
+      - name: Build JAR with wrapper
+        run: ./gradlew --no-daemon clean bootJar      # or “jar” / “shadowJar” – keep it explicit
+        # bootJar puts the file in build/libs/*.jar
+
+      # (optional) expose the JAR as a workflow artefact
+      - name: Upload JAR artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: build/libs/*.jar
+
+      # ──────── GENERATE A SINGLE BUILD TAG ────────
       - name: Compute build tag  (YYYY-MMDD-HHMMSS)
         id: vars
         run: |
-          Y=$(date -u '+%Y')
-          M=$(date -u '+%-m')
-          D=$(date -u '+%-d')
-          H=$(date -u '+%-H')
-          N=$(date -u '+%-M')
-          S=$(date -u '+%-S')
-          MD=$(( M * 100 + D ))
-          HHMMSS=$(( H * 10000 + N * 100 + S ))
-          echo "TAG_SEMANTIC=${Y}.${MD}.${HHMMSS}" >> "$GITHUB_OUTPUT"
-          echo "TAG=${Y}-${MD}-${HHMMSS}" >> "$GITHUB_OUTPUT"
-          echo "Using tag: $TAG"
+          printf "TAG=%s\n" "$(date -u '+%Y-%-m%-d-%-H%M%S')" | tee -a "$GITHUB_OUTPUT"
+          printf "TAG_SEMANTIC=%s\n" "$(date -u '+%Y.%m%d.%H%M%S')" | tee -a "$GITHUB_OUTPUT"
 
-      # ─────────────────────── TESTS ──────────────────────────────
+      # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
         run: ./gradlew --no-daemon test
 
-      # ────────────────────── DOCKER BUILD ───────────────────────
+      # ──────────────── DOCKER BUILD ───────────────
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -60,7 +62,7 @@ jobs:
           provenance: false
           sbom: false
 
-      # ────────────────────── HELM PACKAGE ───────────────────────
+      # ──────────────── HELM PACKAGE ───────────────
       - name: Install Helm
         uses: azure/setup-helm@v4
 
