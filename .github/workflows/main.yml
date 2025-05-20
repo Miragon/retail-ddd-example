@@ -60,6 +60,7 @@ jobs:
           tags: hello-service:${{ steps.vars.outputs.TAG }}
           push: false
           load: true
+          platforms: ${{ matrix.platform }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
