@@ -27,24 +27,22 @@ jobs:
         run: ./gradlew --no-daemon clean bootJar
 
       # ──────── GENERATE A SINGLE BUILD TAG ────────
-      - name: Compute semantic version (YYYY.M.D+<hash>)
+      - name: Compute semantic version (YYYY.M.D+hash)
         id: vars
         run: |
-          Y=$(date -u '+%Y')
-          M=$(date -u '+%-m')
-          D=$(date -u '+%-d')
-
-          DATE="${Y}.${M}.${D}"
-          HASH=$(git rev-parse --short=8 "$GITHUB_SHA")
+          DATE=$(date -u '+%Y.%-m.%-d')
+          HASH=${GITHUB_SHA::8}
           
-          TAG_SEMANTIC=${DATE}+${HASH}
-          TAG=${DATE//./-}-${HASH}
+          TAG_SEMANTIC="${DATE}+${HASH}"
+          TAG="${DATE//./-}-${HASH}"
           
-          echo "Tag: ${TAG}"
-          echo "Semantic Tag: ${TAG_SEMANTIC}"
-
-          echo $TAG >> "$GITHUB_OUTPUT"
-          echo $TAG_SEMANTIC >> "$GITHUB_OUTPUT"
+          {
+            echo "TAG_SEMANTIC=$TAG_SEMANTIC"
+            echo "TAG=$TAG"
+          } >> "$GITHUB_OUTPUT"
+          
+          echo "Helm Version (Semantic) : $TAG_SEMANTIC"
+          echo "Docker Tag              : $TAG"
 
       # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
