@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "skipLibCheck": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "node"
+    ]
+  },
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}
