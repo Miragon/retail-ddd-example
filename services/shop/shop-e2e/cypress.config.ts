@@ -23,7 +23,7 @@ export default defineConfig({
         supportFile: false
     },
     e2e: {
-        baseUrl: process.env.CYPRESS_BASE_URL,
+        //baseUrl: process.env.CYPRESS_BASE_URL,
         numTestsKeptInMemory: 5,
         pageLoadTimeout: 60000,
         specPattern: "e2e/**/*.spec.{js,jsx,ts,tsx}",
@@ -49,7 +49,8 @@ export default defineConfig({
             auth0Domain: process.env.AUTH0_DOMAIN,
             auth0Username: process.env.AUTH0_USERNAME,
             auth0Password: process.env.AUTH0_PASSWORD,
-            cypressBaseUrl: process.env.CYPRESS_BASE_URL
+            auth0ClientId: process.env.AUTH0_CLIENT_ID,
+            baseUrl: process.env.CYPRESS_BASE_URL
         },
         //
         setupNodeEvents: (on, config) => {

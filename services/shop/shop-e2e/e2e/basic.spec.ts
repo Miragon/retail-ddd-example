@@ -1,4 +1,4 @@
-import {API, MSG, PLANNING} from "../support/commands";
+import {ARTICLES} from "../support/commands";
 
 describe("Shop - Basic Testsuite", (): void => {
     before(() => {
@@ -6,12 +6,10 @@ describe("Shop - Basic Testsuite", (): void => {
     });
 
     beforeEach(() => {
-        cy.login("/");
-        cy.pause();
-        //cy.visit("/");
+        cy.login();
     });
 
     it("Contact: Create / Edit / Delete (#unn)", () => {
-        //
+        cy.log(ARTICLES.ENTRY);
     });
 })
