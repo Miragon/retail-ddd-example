@@ -65,7 +65,7 @@ Cypress.Commands.add("login", (url = "/", username = Cypress.env("auth0Username"
                     cy.wait("@apiToken");
                 }
             );
-        },
+        }, // session created
         {
             validate: () => {
                 cy.getCookie(`auth0.${Cypress.env("auth0ClientId")}.is.authenticated`)

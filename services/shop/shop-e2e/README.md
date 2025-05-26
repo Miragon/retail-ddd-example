@@ -11,6 +11,6 @@ You will find in the file ``cypress.config.ts``.
 
 ## Run Cypress
 - <span style="color:orange">Make sure shop-frontend and shop-backend are running!</span>
-- Run yarn cy to start the cypress test runner.
+- Run ``yarn cy`` to start the cypress test runner.
 
 <span style="color:orange">Before running a testsuite, make sure that the corresponding testdata (/shop-e2e/fixtures/testdata/\<suite>.sql) are loaded!</span>
