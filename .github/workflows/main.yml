@@ -15,7 +15,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21 (Corretto) + Gradle cache
+      - name: Set up Java 21 (Corretto) + Gradle cache
         uses: actions/setup-java@v4
         with:
           distribution: corretto
