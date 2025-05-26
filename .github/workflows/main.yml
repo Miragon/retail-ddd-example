@@ -4,15 +4,14 @@ on:
   push:
   pull_request:
     types: [ opened, reopened ]
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # ─────────────────────────── PREP ───────────────────────────
+      # ───────────────────────── PREP ─────────────────────────
       - name: Checkout source
         uses: actions/checkout@v4
 
@@ -23,27 +22,33 @@ jobs:
           java-version: '21'
           cache: gradle
 
-      # ──────────────── GENERATE A SINGLE BUILD TAG ───────────────
-      - name: Compute build tag  (YYYY-MMDD-HHMMSS)
+      # ──────────── BUILD THE JAR ONCE ────────────
+      - name: Build JAR with wrapper
+        run: ./gradlew --no-daemon clean bootJar
+
+      # ──────── GENERATE A SINGLE BUILD TAG ────────
+      - name: Compute semantic version (YYYY.M.D+hash)
         id: vars
         run: |
-          Y=$(date -u '+%Y')
-          M=$(date -u '+%-m')
-          D=$(date -u '+%-d')
-          H=$(date -u '+%-H')
-          N=$(date -u '+%-M')
-          S=$(date -u '+%-S')
-          MD=$(( M * 100 + D ))
-          HHMMSS=$(( H * 10000 + N * 100 + S ))
-          echo "TAG_SEMANTIC=${Y}.${MD}.${HHMMSS}" >> "$GITHUB_OUTPUT"
-          echo "TAG=${Y}-${MD}-${HHMMSS}" >> "$GITHUB_OUTPUT"
-          echo "Using tag: $TAG"
+          DATE=$(date -u '+%Y.%-m.%-d')
+          HASH=${GITHUB_SHA::8}
+          
+          TAG_SEMANTIC="${DATE}+${HASH}"
+          TAG="${DATE//./-}-${HASH}"
+          
+          {
+            echo "TAG_SEMANTIC=$TAG_SEMANTIC"
+            echo "TAG=$TAG"
+          } >> "$GITHUB_OUTPUT"
+          
+          echo "Helm Version (Semantic) : $TAG_SEMANTIC"
+          echo "Docker Tag              : $TAG"
 
-      # ─────────────────────── TESTS ──────────────────────────────
+      # ─────────────────── TESTS ───────────────────
       - name: Unit / integration tests
         run: ./gradlew --no-daemon test
 
-      # ────────────────────── DOCKER BUILD ───────────────────────
+      # ──────────────── DOCKER BUILD ───────────────
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -55,12 +60,13 @@ jobs:
           tags: hello-service:${{ steps.vars.outputs.TAG }}
           push: false
           load: true
+          platforms: ${{ matrix.platform }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
           sbom: false
 
-      # ────────────────────── HELM PACKAGE ───────────────────────
+      # ──────────────── HELM PACKAGE ───────────────
       - name: Install Helm
         uses: azure/setup-helm@v4
 
