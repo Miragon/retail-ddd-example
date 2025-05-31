@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.springDependencyManagement)
     alias(libs.plugins.kotlinPluginJpa)
     alias(libs.plugins.kotlinSpringBoot)
+    alias(libs.plugins.springBoot)
 }
 
 dependencies {
