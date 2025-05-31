@@ -1,20 +1,26 @@
-package io.miragon.shop.adapter.outbound
+package io.miragon.shop.adapter.inbound.testdata
 
-import io.miragon.shop.application.port.outbound.ArticleRepository
+import io.miragon.shop.application.port.inbound.ImportArticleUseCase
 import io.miragon.shop.domain.Article
 import io.miragon.shop.domain.shared.ArticleDescription
 import io.miragon.shop.domain.shared.ArticleId
 import io.miragon.shop.domain.shared.ArticleName
 import io.miragon.shop.domain.shared.Price
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class ArticleInMemoryRepository : ArticleRepository {
+class TestDataImporter(
+    private val useCase: ImportArticleUseCase
+) {
 
-    private val articles = testArticles()
-
-    override fun loadAll() = articles
+    @EventListener(ApplicationReadyEvent::class)
+    fun importTestData() {
+        val articles = testArticles()
+        articles.forEach { useCase.importArticle(it) }
+    }
 
     private fun testArticles() = listOf(
         Article(
@@ -42,4 +48,4 @@ class ArticleInMemoryRepository : ArticleRepository {
             price = Price(349.99),
         )
     )
-}
+} 
