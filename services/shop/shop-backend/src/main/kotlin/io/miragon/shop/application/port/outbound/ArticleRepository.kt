@@ -4,4 +4,5 @@ import io.miragon.shop.domain.Article
 
 interface ArticleRepository {
     fun loadAll(): List<Article>
+    fun save(article: Article)
 }
