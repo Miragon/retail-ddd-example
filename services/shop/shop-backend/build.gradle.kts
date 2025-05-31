@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.springDependencyManagement)
     alias(libs.plugins.kotlinPluginJpa)
     alias(libs.plugins.kotlinSpringBoot)
+    alias(libs.plugins.springBoot)
 }
 
 dependencies {
@@ -10,4 +11,11 @@ dependencies {
     implementation(libs.bundles.database)
     implementation(libs.bundles.openApi)
     testImplementation(libs.bundles.commonTest)
+    testRuntimeOnly(libs.h2)
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+    }
 }
