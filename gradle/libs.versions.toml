@@ -7,7 +7,7 @@ kotlin = "2.1.21"
 kotlinLogging = "7.0.7"
 springBoot = "3.5.0"
 springGradleDependencyManagement = "1.1.7"
-h2 = "2.2.224"
+h2 = "2.3.232"
 
 [libraries]
 kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
