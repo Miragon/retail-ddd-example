@@ -4,13 +4,11 @@
 
 [versions]
 kotlin = "2.1.21"
-kotlinLogging = "7.0.7"
 springBoot = "3.5.0"
 springGradleDependencyManagement = "1.1.7"
-h2 = "2.2.224"
 
 [libraries]
-kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
+kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.7" }
 springSecurity = { module = 'org.springframework.boot:spring-boot-starter-security', version.ref = "springBoot" }
 springBootWeb = { module = 'org.springframework.boot:spring-boot-starter-web', version.ref = "springBoot" }
 springBootActuator = { module = 'org.springframework.boot:spring-boot-starter-actuator', version.ref = "springBoot" }
@@ -24,14 +22,15 @@ postgresql = { module = 'org.postgresql:postgresql', version = "42.7.6" }
 springBootTest = { module = 'org.springframework.boot:spring-boot-starter-test', version.ref = "springBoot" }
 mockk = { module = "io.mockk:mockk", version = "1.14.2" }
 springMockk = { module = "com.ninja-squad:springmockk", version = "4.0.2" }
-h2 = { module = 'com.h2database:h2', version.ref = "h2" }
+h2 = { module = 'com.h2database:h2', version = "2.2.224" }
+archunit = { module = "com.tngtech.archunit:archunit", version = "1.4.1" }
 
 # Libraries can be bundled together for easier import
 [bundles]
 openApi = ["springDoc", "jacksonModuleKotlin"]
 webService = ["kotlinLogging", "springSecurity", "springBootOAuthServer", "springBootWeb", "springBootActuator"]
 database = ["springBootJpa", "postgresql"]
-commonTest = ["springBootTest", "mockk", "springMockk"]
+commonTest = ["springBootTest", "mockk", "springMockk", "archunit"]
 
 [plugins]
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }

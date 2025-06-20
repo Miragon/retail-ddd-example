@@ -12,3 +12,13 @@ dependencies {
     testImplementation(libs.bundles.commonTest)
     testRuntimeOnly(libs.h2)
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+kotlin {
+    jvmToolchain(21)
+}

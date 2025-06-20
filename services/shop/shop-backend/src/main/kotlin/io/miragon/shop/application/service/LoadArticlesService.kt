@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class LoadArticlesService(
-    private val repository: ArticleRepository
+    private val repository: ArticleRepository,
 ) : ArticleQuery {
     override fun loadAll() = repository.loadAll()
 }
