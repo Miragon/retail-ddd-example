@@ -5,6 +5,7 @@ import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition
 import com.tngtech.archunit.library.Architectures
 import de.dm.elvis.common.test.archunit.rules.InterfaceImplementationConditions.implementExactlyOneInterfaceFrom
+import io.miragon.shop.architecture.conditions.UseCaseDependencyConditions.onlyFulfilOneUseCase
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -38,7 +39,7 @@ class HexagonalArchitectureTest {
             .whereLayer("Application").mayNotBeAccessedByAnyLayer()
             .whereLayer("Domain").mayNotAccessAnyLayer()
             .ensureAllClassesAreContainedInArchitectureIgnoring(
-                rootPackage, "$rootPackage.architecture"
+                rootPackage, "$rootPackage.architecture.."
             )
 
         architectureRule.check(allClasses)
@@ -62,6 +63,7 @@ class HexagonalArchitectureTest {
         fun `in ports should either be use-cases or queries`() {
             ArchRuleDefinition.classes()
                 .that().resideInAPackage("..application.port.inbound..")
+                .and().areTopLevelClasses()
                 .should().haveSimpleNameEndingWith("UseCase")
                 .orShould().haveSimpleNameEndingWith("Query")
                 .because("Inbound ports should be defined as use-cases or queries")
@@ -99,5 +101,19 @@ class HexagonalArchitectureTest {
                 .check(productionClasses)
         }
     }
-    
+
+    @Nested
+    inner class InAdapterTests {
+
+        @Test
+        fun `in adapters should only offer one use-case or query`() {
+            ArchRuleDefinition.classes()
+                .that().resideInAPackage("..adapter.inbound..")
+                .should(onlyFulfilOneUseCase)
+                .because("In-adapters should implement exactly one use-case or query")
+                .check(productionClasses)
+        }
+
+    }
+
 }
