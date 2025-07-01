@@ -1,0 +1,8 @@
+# Ignore Gradle cache and build artifacts
+.gradle
+buildSrc
+
+# IDE and system files
+.idea
+.vscode
+*.log

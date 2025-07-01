@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation(libs.bundles.webService)
+    implementation(libs.bundles.security)
     implementation(libs.bundles.database)
     implementation(libs.bundles.openApi)
     testImplementation(libs.bundles.commonTest)

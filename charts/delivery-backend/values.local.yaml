@@ -1,0 +1,22 @@
+# Local development values for delivery-backend
+# Override production values for local development
+
+image:
+  tag: "local"
+
+service:
+  type: LoadBalancer
+
+ingress:
+  enabled: true
+  hosts:
+    - host: delivery-backend.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "local"
+  - name: SERVER_PORT
+    value: "8080"

@@ -23,7 +23,6 @@ This is a multi-module Gradle project using Kotlin and Spring Boot. Java 21 is r
 ./gradlew :services:shop:shop-backend:bootRun
 ./gradlew :services:delivery:delivery-backend:bootRun
 ./gradlew :services:warehouse:warehouse-backend:bootRun
-./gradlew :services:hello-service:bootRun
 ```
 
 **Run single test:**
@@ -50,8 +49,8 @@ npm run apiGeneration # Generate API client from OpenAPI spec
 
 **E2E Testing (in services/shop/shop-e2e/):**
 ```bash
-yarn cy:all    # Run all Cypress tests
-yarn cy:spec   # Run specific test spec
+npm run cy:all    # Run all Cypress tests
+npm run cy:spec   # Run specific test spec
 ```
 
 ## Architecture Overview
@@ -62,7 +61,6 @@ This project implements Domain-Driven Design (DDD) with Hexagonal Architecture a
 - **shop-backend**: Main e-commerce service with full CRUD, persistence, and security
 - **delivery-backend**: Delivery domain service (in-memory storage)
 - **warehouse-backend**: Warehouse domain service (in-memory storage)  
-- **hello-service**: Simple example service
 - **shop-frontend**: React SPA with Material-UI
 - **shop-e2e**: Cypress end-to-end tests
 
@@ -129,11 +127,26 @@ helm upgrade --install postgres ./postgres
 ```
 
 2. **Build and deploy services:**
-```bash
-# Build image in minikube
-minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
 
-# Deploy with Helm
+**Build images in minikube:**
+```bash
+minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
+```
+
+```bash
+minikube image build -t delivery-backend:local -f services/delivery/delivery-backend/Dockerfile .
+```
+
+```bash
+minikube image build -t warehouse-backend:local -f services/warehouse/warehouse-backend/Dockerfile .
+```
+
+```bash
+minikube image build -t shop-frontend:local -f services/shop/shop-frontend/Dockerfile .
+```
+
+**Deploy with Helm:**
+```bash
 helm upgrade --install shop-backend ./shop-backend --values ./shop-backend/values.local.yaml
 ```
 
