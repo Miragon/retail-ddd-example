@@ -15,10 +15,8 @@ dependencies {
     testRuntimeOnly(libs.h2)
 }
 
-tasks {
-    test {
-        useJUnitPlatform()
-    }
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {

@@ -1,5 +1,6 @@
 package io.miragon.shop.adapter.inbound.rest
 
+import io.miragon.shop.adapter.inbound.rest.article.ArticleDto
 import java.util.*
 
 fun testArticleDto(
@@ -7,7 +8,7 @@ fun testArticleDto(
     name: String = "Test Article",
     description: String = "Test Description",
     price: Double = 99.99
-): ArticleDto = ArticleDto(
+) = ArticleDto(
     id = id,
     name = name,
     description = description,

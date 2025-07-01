@@ -1,59 +1,83 @@
+import {useCallback} from "react";
+import {Alert, Box, CircularProgress, Typography} from "@mui/material";
+import {ShoppingBag as ShoppingBagIcon, Storefront as StorefrontIcon} from "@mui/icons-material";
 import {useArticles} from "../../hooks/articles.hook.ts";
-import {LinearProgress, Typography} from "@mui/material";
 import {ArticleCard} from "./components/article-card.tsx";
-import React, {useCallback} from "react";
 import {If} from "../../shared/if.tsx";
 import {useNavigate} from "react-router";
 
 export function ArticleOverviewPage() {
-    
-    const {status, data, error} = useArticles()
-    const navigate = useNavigate()
+    const {status, data, error} = useArticles();
+    const navigate = useNavigate();
 
     const navigateToArticleDetails = useCallback((articleId: string) => {
-        navigate(`/articles/${articleId}`)
-    }, [])
+        navigate(`/articles/${articleId}`);
+    }, [navigate]);
+
+    if (status === 'pending') {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress/>
+            </Box>
+        );
+    }
+
+    if (status === 'error') {
+        return (
+            <Alert severity="error">
+                Error loading articles: {(error as Error).message}
+            </Alert>
+        );
+    }
+
+    const hasArticles = Boolean(data && data.length > 0);
 
     return (
-        <React.Fragment>
-
-            <Typography variant="h4" component="h1" style={{marginBottom: "1rem"}}>
-                All articles
+        <Box maxWidth="1200px" margin="0 auto" padding="2rem">
+            <Typography variant="h4" component="h1" gutterBottom>
+                <StorefrontIcon sx={{mr: 2, verticalAlign: 'middle'}}/>
+                All Articles
             </Typography>
 
-            <If condition={status === 'pending'}>
-                <div style={{textAlign: "center", paddingTop: "2rem"}}>
-                    <Typography>Loading articles...</Typography>
-                    <LinearProgress color="primary"/>
-                </div>
+            <If condition={!hasArticles}>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    minHeight="400px"
+                    textAlign="center"
+                >
+                    <ShoppingBagIcon sx={{fontSize: 80, color: 'grey.400', mb: 3}}/>
+                    <Typography variant="h6" color="textSecondary" gutterBottom>
+                        No articles available
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Check back later for new products!
+                    </Typography>
+                </Box>
             </If>
 
-            {status === 'error' && (
-                <div style={{textAlign: "center", paddingTop: "2rem"}}>
-                    <Typography>Error: {(error as Error).message}</Typography>
-                </div>
-            )}
-
-            {status === 'success' && (
-                <React.Fragment>
-                    <If condition={data.length === 0}>
-                        <div className="text-center text-gray-500">
-                            <Typography>No articles available.</Typography>
-                        </div>
-                    </If>
-                    <If condition={data.length > 0}>
-                        <div style={{display: "flex", flexDirection: "column", flexWrap: "wrap", gap: "1rem"}}>
-                            {data?.map((article) => (
-                                <ArticleCard
-                                    key={article.id}
-                                    article={article}
-                                    clickOnCard={navigateToArticleDetails}
-                                />
-                            ))}
-                        </div>
-                    </If>
-                </React.Fragment>
-            )}
-        </React.Fragment>
-    )
+            <If condition={hasArticles}>
+                <Box
+                    display="grid"
+                    gridTemplateColumns={{
+                        xs: 'repeat(1, 1fr)',
+                        sm: 'repeat(2, 1fr)',
+                        md: 'repeat(3, 1fr)',
+                        lg: 'repeat(4, 1fr)'
+                    }}
+                    gap={3}
+                >
+                    {data?.map((article) => (
+                        <ArticleCard
+                            key={article.id}
+                            article={article}
+                            clickOnCard={navigateToArticleDetails}
+                        />
+                    ))}
+                </Box>
+            </If>
+        </Box>
+    );
 }

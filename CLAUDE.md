@@ -9,16 +9,19 @@ This is a multi-module Gradle project using Kotlin and Spring Boot. Java 21 is r
 ### Common Commands
 
 **Build entire project:**
+
 ```bash
 ./gradlew build
 ```
 
 **Run tests:**
+
 ```bash
 ./gradlew test
 ```
 
 **Run specific service locally:**
+
 ```bash
 ./gradlew :services:shop:shop-backend:bootRun
 ./gradlew :services:delivery:delivery-backend:bootRun
@@ -26,11 +29,13 @@ This is a multi-module Gradle project using Kotlin and Spring Boot. Java 21 is r
 ```
 
 **Run single test:**
+
 ```bash
 ./gradlew :services:shop:shop-backend:test --tests "LoadArticlesServiceTest"
 ```
 
 **Build Docker images:**
+
 ```bash
 docker build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
 ```
@@ -40,6 +45,7 @@ docker build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
 The shop frontend is a React + Vite application:
 
 **Frontend commands (in services/shop/shop-frontend/):**
+
 ```bash
 npm run dev          # Start development server
 npm run build        # Build for production  
@@ -48,6 +54,7 @@ npm run apiGeneration # Generate API client from OpenAPI spec
 ```
 
 **E2E Testing (in services/shop/shop-e2e/):**
+
 ```bash
 npm run cy:all    # Run all Cypress tests
 npm run cy:spec   # Run specific test spec
@@ -58,9 +65,10 @@ npm run cy:spec   # Run specific test spec
 This project implements Domain-Driven Design (DDD) with Hexagonal Architecture across multiple bounded contexts:
 
 ### Services Structure
+
 - **shop-backend**: Main e-commerce service with full CRUD, persistence, and security
 - **delivery-backend**: Delivery domain service (in-memory storage)
-- **warehouse-backend**: Warehouse domain service (in-memory storage)  
+- **warehouse-backend**: Warehouse domain service (in-memory storage)
 - **shop-frontend**: React SPA with Material-UI
 - **shop-e2e**: Cypress end-to-end tests
 
@@ -82,6 +90,7 @@ src/main/kotlin/
 ```
 
 **Architectural Rules:**
+
 - Domain layer has no external dependencies
 - Application layer depends only on domain
 - Adapters implement ports but don't depend on each other
@@ -92,6 +101,7 @@ src/main/kotlin/
 ### Technology Stack
 
 **Backend:**
+
 - Kotlin + Spring Boot 3.5.3
 - Spring Security with OAuth2 JWT
 - Spring Data JPA with PostgreSQL
@@ -99,6 +109,7 @@ src/main/kotlin/
 - ArchUnit for architecture testing
 
 **Frontend:**
+
 - React 19 + TypeScript
 - Vite build tool
 - Material-UI components
@@ -106,6 +117,7 @@ src/main/kotlin/
 - Auth0 for authentication
 
 **Infrastructure:**
+
 - Docker containers
 - Kubernetes/Helm for deployment
 - Minikube for local development
@@ -113,6 +125,7 @@ src/main/kotlin/
 ## Domain Model
 
 The core domain revolves around Articles with shared value objects:
+
 - `ArticleId`, `ArticleName`, `ArticleDescription`, `Price`, `ImageUrl`
 
 Each service implements its own article repository following the same domain model but different persistence strategies.
@@ -120,6 +133,7 @@ Each service implements its own article repository following the same domain mod
 ## Local Development Setup
 
 1. **Start infrastructure:**
+
 ```bash
 cd charts
 minikube start
@@ -129,6 +143,7 @@ helm upgrade --install postgres ./postgres
 2. **Build and deploy services:**
 
 **Build images in minikube:**
+
 ```bash
 minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
 ```
@@ -146,11 +161,13 @@ minikube image build -t shop-frontend:local -f services/shop/shop-frontend/Docke
 ```
 
 **Deploy with Helm:**
+
 ```bash
 helm upgrade --install shop-backend ./shop-backend --values ./shop-backend/values.local.yaml
 ```
 
 3. **Access services:**
+
 ```bash
 minikube tunnel  # Enable LoadBalancer access
 ```
@@ -163,3 +180,7 @@ minikube tunnel  # Enable LoadBalancer access
 - **E2E tests**: Cypress for full user workflows
 
 Always run `./gradlew test` before committing to ensure architecture compliance and functionality.
+
+## Implementation Guidelines
+
+Always use IDE diagnostics to validate code after implementation

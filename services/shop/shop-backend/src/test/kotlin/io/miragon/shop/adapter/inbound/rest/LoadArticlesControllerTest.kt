@@ -2,9 +2,12 @@ package io.miragon.shop.adapter.inbound.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.miragon.shop.adapter.inbound.rest.article.ArticleDto
+import io.miragon.shop.adapter.inbound.rest.article.LoadArticlesController
 import io.miragon.shop.application.port.inbound.ArticleQuery
-import io.miragon.shop.domain.Article
-import io.miragon.shop.domain.testArticle
+import io.miragon.shop.domain.article.Article
+import io.miragon.shop.domain.article.ArticleId
+import io.miragon.shop.domain.article.testArticle
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,13 +41,13 @@ class LoadArticlesControllerTest {
 
     private fun createTestArticles(): List<Article> = listOf(
         testArticle(
-            id = UUID.fromString("4ca4a9fe-6ce6-41a1-87f6-f99d4c6882a4"),
+            id = ArticleId("4ca4a9fe-6ce6-41a1-87f6-f99d4c6882a4"),
             name = "Test Article 1",
             description = "Test Description 1",
             price = 99.99
         ),
         testArticle(
-            id = UUID.fromString("5ca4a9fe-6ce6-41a1-87f6-f99d4c6882a5"),
+            id = ArticleId("5ca4a9fe-6ce6-41a1-87f6-f99d4c6882a5"),
             name = "Test Article 2",
             description = "Test Description 2",
             price = 149.99

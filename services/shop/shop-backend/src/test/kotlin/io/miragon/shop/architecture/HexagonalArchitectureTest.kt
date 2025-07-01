@@ -100,6 +100,15 @@ class HexagonalArchitectureTest {
                 .because("Application services should not depend on each other")
                 .check(productionClasses)
         }
+
+        @Test
+        fun `only application services should be annotated with Transactional`() {
+            ArchRuleDefinition.noClasses()
+                .that().resideOutsideOfPackage("..application.service..")
+                .should().beAnnotatedWith("org.springframework.transaction.annotation.Transactional")
+                .because("@Transactional annotations should only be used in application services, not in adapters or other layers")
+                .check(productionClasses)
+        }
     }
 
     @Nested

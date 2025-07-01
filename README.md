@@ -3,29 +3,38 @@
 > *A showcase of how multiple teams can collaborate in a monorepo using Domain-Driven Design*
 
 Welcome to our **Domain-Driven Design** showcase!
-This isn't just another "Hello World" - it's a **multi-team monorepo** demonstrating how different bounded contexts can coexist, evolve independently, and work together in harmony.
+This isn't just another "Hello World" - it's a **multi-team monorepo** demonstrating how different bounded contexts can
+coexist, evolve independently, and work together in harmony.
 We've got hexagons, bounded contexts, and more patterns than a textile factory.
 
 ## 🎯 What's This All About?
 
-This project demonstrates how **multiple development teams** can work effectively in a **single repository** using **DDD principles**, **bounded contexts**, and **Hexagonal Architecture**. 
+This project demonstrates how **multiple development teams** can work effectively in a **single repository** using **DDD
+principles**, **bounded contexts**, and **Hexagonal Architecture**.
 
 **Key Concepts Demonstrated:**
+
 - 🏢 **Multi-team ownership** - Each service represents a different team's domain
-- 🔒 **Bounded contexts** - Clear domain boundaries with explicit interfaces  
+- 🔒 **Bounded contexts** - Clear domain boundaries with explicit interfaces
 - 📦 **Monorepo benefits** - Shared tooling, unified CI/CD, cross-cutting concerns
 - 🏗️ **Independent deployability** - Teams can deploy their services autonomously
 - 📋 **Documentation-driven development** - ADRs, architectural guidelines, and decision tracking
 
-Think of it as a **digital shopping mall** where each team owns their "store" (bounded context) but shares the infrastructure, while maintaining clear ownership and autonomy.
+Think of it as a **digital shopping mall** where each team owns their "store" (bounded context) but shares the
+infrastructure, while maintaining clear ownership and autonomy.
 
-### 🏪 The Shopping Empire
+## 🏬 The Domain: An online shop
+
+The domain is a **retail e-commerce platform** with multiple bounded contexts,
+each representing a different aspect of the business:
 
 - **🛒 Shop Service**: The main attraction - handles articles, orders, and all that e-commerce jazz
 - **🚚 Delivery Service**: Knows where your packages are (probably stuck in traffic)
 - **📦 Warehouse Service**: Keeps track of inventory (yes, we're out of toilet paper again)
 
-### 🎪 Tech Circus
+## 🎪 Tech Circus
+
+Within this monorepo, we are using a variety of technologies to keep things interesting and modern.
 
 **Backend Performers:**
 
@@ -111,12 +120,6 @@ Found a bug? Want to add a feature? Great! Just remember:
 - Write tests (future you will thank present you)
 - Keep the domain pure (no external dependencies in there!)
 
-## 📚 Learn More
-
-- Check out [CLAUDE.md](CLAUDE.md) for detailed development instructions
-- Peek at [charts/README.md](charts/README.md) for deployment wizardry
-- Browse the code - it's actually readable!
-
 ---
 
-*Built with ❤️ and an unhealthy amount of caffeine*
+*Built with ❤️ by Miragon*
