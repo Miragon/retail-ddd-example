@@ -12,7 +12,6 @@
             <option value="$PROJECT_DIR$/services" />
             <option value="$PROJECT_DIR$/services/delivery" />
             <option value="$PROJECT_DIR$/services/delivery/delivery-backend" />
-            <option value="$PROJECT_DIR$/services/hello-service" />
             <option value="$PROJECT_DIR$/services/shop" />
             <option value="$PROJECT_DIR$/services/shop/shop-backend" />
             <option value="$PROJECT_DIR$/services/warehouse" />

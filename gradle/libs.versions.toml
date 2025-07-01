@@ -28,7 +28,8 @@ archunit = { module = "com.tngtech.archunit:archunit", version = "1.4.1" }
 # Libraries can be bundled together for easier import
 [bundles]
 openApi = ["springDoc", "jacksonModuleKotlin"]
-webService = ["kotlinLogging", "springSecurity", "springBootOAuthServer", "springBootWeb", "springBootActuator"]
+security = ["springSecurity", "springBootOAuthServer"]
+webService = ["kotlinLogging", "springBootWeb", "springBootActuator"]
 database = ["springBootJpa", "postgresql"]
 commonTest = ["springBootTest", "mockk", "springMockk", "archunit"]
 

@@ -13,7 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-include("services:hello-service")
 include("services:warehouse:warehouse-backend")
 include("services:delivery:delivery-backend")
 include("services:shop:shop-backend")

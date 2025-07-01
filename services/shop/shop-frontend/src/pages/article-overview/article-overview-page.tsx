@@ -6,9 +6,7 @@ import {If} from "../../shared/if.tsx";
 import {useNavigate} from "react-router";
 
 export function ArticleOverviewPage() {
-
-    console.log("ArticleOverviewPage")
-
+    
     const {status, data, error} = useArticles()
     const navigate = useNavigate()
 
