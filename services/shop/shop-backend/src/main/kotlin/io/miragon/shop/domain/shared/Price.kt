@@ -1,7 +1,7 @@
 package io.miragon.shop.domain.shared
 
-data class Price(val value: Double) {
+class Price(value: Double) : ValueObject<Double>(value) {
     init {
-        require(value > 0) { "Article price must be greater than zero" }
+        require(value >= 0) { "Article price must be greater than zero" }
     }
 }
