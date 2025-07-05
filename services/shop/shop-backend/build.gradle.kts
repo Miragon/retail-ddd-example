@@ -11,6 +11,7 @@ dependencies {
     implementation(libs.bundles.security)
     implementation(libs.bundles.database)
     implementation(libs.bundles.openApi)
+    implementation(libs.springAiMcpServer)
     testImplementation(libs.bundles.commonTest)
     testRuntimeOnly(libs.h2)
 }
