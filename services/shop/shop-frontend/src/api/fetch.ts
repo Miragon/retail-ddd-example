@@ -31,16 +31,10 @@ export const apiExec = async <API extends BaseAPI, T>(
     }
 };
 
-/**
- * Currently we don't have a proxy for the local development.
- * Thus, we use the port to differentiate between local and production.
- * This should be replaced with a proper proxy setup in the future.
- */
 const getClientConfig = async (): Promise<Configuration> => {
     const token = localStorage.getItem("dddToken");
-    const basePath = window.location.port === '8080' ? '' : BASE_PATH;
     return new Configuration({
-        basePath: basePath,
+        basePath: BASE_PATH,
         baseOptions: {
             "headers": {
                 "Authorization": `Bearer ${token}`,

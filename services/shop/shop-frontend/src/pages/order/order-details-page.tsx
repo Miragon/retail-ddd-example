@@ -91,14 +91,15 @@ export function OrderDetailsPage() {
                                     primary={item.articleName}
                                     secondary={
                                         <Box>
-                                            <Typography variant="body2" color="textSecondary">
+                                            <Typography variant="body2" color="textSecondary" component="div">
                                                 Quantity: {item.quantity} × {item.pricePerItem.toFixed(2)} €
                                             </Typography>
-                                            <Typography variant="body2" component="span" sx={{fontWeight: 'bold'}}>
+                                            <Typography variant="body2" component="div" sx={{fontWeight: 'bold'}}>
                                                 Subtotal: {item.totalPrice.toFixed(2)} €
                                             </Typography>
                                         </Box>
                                     }
+                                    secondaryTypographyProps={{ component: 'div' }}
                                 />
                             </ListItem>
                             {index < orderData.items.length - 1 && <Divider/>}

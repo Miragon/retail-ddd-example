@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {
     Alert,
     Box,
@@ -8,7 +8,6 @@ import {
     IconButton,
     List,
     ListItem,
-    ListItemSecondaryAction,
     ListItemText,
     Paper,
     Typography
@@ -19,12 +18,21 @@ import {useCompleteOrder} from "../../hooks/order.hook";
 import {If} from "../../shared/if";
 import {useNavigate} from "react-router";
 import {getCartItemCount, isCartEmpty} from "../../utils/cart.utils.ts";
+import {useArticles} from "../../hooks/articles.hook.ts";
 
 export function CartPage() {
+
     const {data: cart, status, error} = useCart();
+    const {data} = useArticles()
+
     const removeFromCartMutation = useRemoveFromCart();
     const completeOrderMutation = useCompleteOrder();
     const navigate = useNavigate();
+
+    const getArticleNameById = useCallback((articleId: string): string => {
+        const article = data?.find(a => a.id === articleId);
+        return article ? article.name : `Unknown Article (${articleId})`;
+    }, [data]);
 
     const handleRemoveFromCart = (articleId: string) => {
         removeFromCartMutation.mutate(articleId);
@@ -57,9 +65,7 @@ export function CartPage() {
             </Alert>
         );
     }
-
-    console.log('Cart data:', cart);
-
+    
     return (
         <Box maxWidth="800px" margin="0 auto" padding="2rem">
             <Typography variant="h4" component="h1" gutterBottom>
@@ -91,25 +97,10 @@ export function CartPage() {
                     <List>
                         {cart?.items.map((item, index) => (
                             <React.Fragment key={item.articleId}>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={`Article ${item.articleId}`}
-                                        secondary={
-                                            <Box>
-                                                <Typography variant="body2" color="textSecondary">
-                                                    Quantity: {item.quantity}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary">
-                                                    Price per item: {item.pricePerItem.toFixed(2)} €
-                                                </Typography>
-                                                <Typography variant="body2" component="span" sx={{fontWeight: 'bold'}}>
-                                                    Total: {item.totalPrice.toFixed(2)} €
-                                                </Typography>
-                                            </Box>
-                                        }
-                                    />
-                                    <ListItemSecondaryAction>
+                                <ListItem
+                                    secondaryAction={
                                         <IconButton
+                                            sx={{mr: 0.5}}
                                             edge="end"
                                             aria-label="remove"
                                             onClick={() => handleRemoveFromCart(item.articleId)}
@@ -117,7 +108,24 @@ export function CartPage() {
                                             color="error">
                                             <DeleteIcon/>
                                         </IconButton>
-                                    </ListItemSecondaryAction>
+                                    }>
+                                    <ListItemText
+                                        primary={getArticleNameById(item.articleId)}
+                                        secondary={
+                                            <Box>
+                                                <Typography variant="body2" color="textSecondary" component="div">
+                                                    Quantity: {item.quantity}
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary" component="div">
+                                                    Price per item: {item.pricePerItem.toFixed(2)} €
+                                                </Typography>
+                                                <Typography variant="body2" component="div" sx={{fontWeight: 'bold'}}>
+                                                    Total: {item.totalPrice.toFixed(2)} €
+                                                </Typography>
+                                            </Box>
+                                        }
+                                        secondaryTypographyProps={{ component: 'div' }}
+                                    />
                                 </ListItem>
                                 {index < cart.items.length - 1 && <Divider/>}
                             </React.Fragment>

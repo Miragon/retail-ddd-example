@@ -1,5 +1,6 @@
 {
   "name": "@miragon/ddd-shop",
+  "description": "Example frontend for a DDD-based shop application",
   "private": true,
   "type": "module",
   "scripts": {
