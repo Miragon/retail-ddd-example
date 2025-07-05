@@ -8,28 +8,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 class SecurityConfig {
 
-    /**
-     * We will remove this with when a gateway (like nginx) is in place
-     */
-    @Bean
-    fun corsConfigurer(): WebMvcConfigurer {
-        return object : WebMvcConfigurer {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**") // Match all endpoints
-                    .allowedOrigins("*")   // Allow all origins
-                    .allowedMethods("*")   // Allow all HTTP methods
-                    .allowedHeaders("*")   // Allow all headers
-            }
-        }
-    }
 
     @Bean
     @Throws(Exception::class)
@@ -45,7 +29,6 @@ class SecurityConfig {
             oauth2.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) }
         }.headers { it.frameOptions { options -> options.sameOrigin() } }
             .csrf { it.disable() }
-            .cors { }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
 
         return http.build()
