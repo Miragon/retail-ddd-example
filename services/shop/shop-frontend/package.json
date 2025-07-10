@@ -1,5 +1,6 @@
 {
   "name": "@miragon/ddd-shop",
+  "description": "Example frontend for a DDD-based shop application",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,7 +14,8 @@
     "@auth0/auth0-react": "2.3.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
-    "@mui/material": "7.1.0",
+    "@mui/icons-material": "7.2.0",
+    "@mui/material": "7.2.0",
     "@tanstack/query-sync-storage-persister": "5.76.1",
     "@tanstack/react-query": "5.76.1",
     "@tanstack/react-query-devtools": "5.76.1",

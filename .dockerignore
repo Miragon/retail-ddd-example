@@ -1,6 +1,8 @@
-**/build
-**/out
-**/.gradle
+# Ignore Gradle cache and build artifacts
 .gradle
+buildSrc
+
+# IDE and system files
 .idea
-*.iml
+.vscode
+*.log
