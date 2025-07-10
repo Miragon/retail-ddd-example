@@ -7,6 +7,7 @@ describe("Shop - Basic Testsuite", (): void => {
 
     beforeEach(() => {
         cy.login();
+        cy.visit("/"); // TODO check?
     });
 
     it("Contact: Create / Edit / Delete (#unn)", () => {

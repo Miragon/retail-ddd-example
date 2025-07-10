@@ -2,7 +2,7 @@ declare global {
     namespace Cypress {
         // noinspection JSUnusedGlobalSymbols
         interface Chainable {
-            login(url?: string, user?: string, pw?: string): Cypress.Chainable
+            login(user?: string, pw?: string): Cypress.Chainable
         }
     }
 }
@@ -18,7 +18,7 @@ const AUTH0 = {
     TOKEN: `https://${Cypress.env("auth0Domain")}/oauth/token`
 }
 
-Cypress.Commands.add("login", (url = "/", username = Cypress.env("auth0Username"), password = Cypress.env("auth0Password")) => {
+Cypress.Commands.add("login", (username = Cypress.env("auth0Username"), password = Cypress.env("auth0Password")) => {
     cy.intercept("GET", API.ARTICLES, req => {
         req.continue(res => {
             expect(res.statusCode).to.eq(200);
@@ -28,11 +28,11 @@ Cypress.Commands.add("login", (url = "/", username = Cypress.env("auth0Username"
         displayName: "AUTH0 LOGIN",
         message: [`🔐 Session | ${Cypress.spec.name}`]
     });
+    // NOTE: the session ID has to be unique for each user login to avoid conflicts
     cy.session(
         `${username}-${Cypress.spec.name}`,
         async () => {
             cy.intercept("POST", AUTH0.TOKEN).as("apiToken");
-            // Clear all sessions and cookies.
             await Cypress.session.clearAllSavedSessions();
             cy.clearAllCookies();
             // App landing page redirects to Auth0.
@@ -63,6 +63,7 @@ Cypress.Commands.add("login", (url = "/", username = Cypress.env("auth0Username"
                     cy.get("@submit").click();
                     // receive the token, next get redirected
                     cy.wait("@apiToken");
+                    cy.wait("@apiArticles"); // TODO not verified yet
                 }
             );
         }, // session created
@@ -80,7 +81,8 @@ Cypress.Commands.add("login", (url = "/", username = Cypress.env("auth0Username"
             cacheAcrossSpecs: false
         }); // blank page
     cy.get("[data-cy='cypress-logo']").should("be.visible"); // wait for blank page
-    cy.visit(url);
-    cy.get("#root").should("be.visible");
-    cy.wait("@apiArticles");
+    // TODO maybe reactivate this later
+    // cy.visit(url);
+    // cy.get("#root").should("be.visible");
+    // cy.wait("@apiArticles");
 });
