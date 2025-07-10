@@ -48,6 +48,7 @@ Moreover you may need to build the Postgres image:
 
 ```bash
 cd postgres
+helm repo add charts https://charts.bitnami.com/bitnami
 helm dependency build
 ```
 
