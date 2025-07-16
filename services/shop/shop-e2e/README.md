@@ -15,7 +15,6 @@ You will find in the file `cypress.config.ts`.
 
 <span style="color:orange">Before running a testsuite, make sure that the corresponding testdata (/shop-e2e/fixtures/testdata/\<suite>.sql) are loaded!</span>
 
-
 ## Write a Cypress Test
     `import {ARTICLES} from "../support/commands";
      describe("Shop - Basic Testsuite", (): void => {

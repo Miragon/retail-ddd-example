@@ -26,15 +26,12 @@ Before deploying, you need to build the project
 
 ```bash
 # Build the Gradle project
-cd ..
 ./gradlew build
 ```
 
 After that, you can build the Docker images directly in Minikube:
 
 ```bash
-cd ..
-
 # Build backend images
 minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
 minikube image build -t delivery-backend:local -f services/delivery/delivery-backend/Dockerfile .
@@ -47,7 +44,8 @@ minikube image build -t shop-frontend:local -f services/shop/shop-frontend/Docke
 Moreover you may need to build the Postgres image:
 
 ```bash
-cd postgres
+cd charts/postgres
+helm repo add charts https://charts.bitnami.com/bitnami
 helm dependency build
 ```
 
@@ -57,6 +55,7 @@ To install all charts at once:
 
 ```bash
 # Install infrastructure first
+cd ..
 helm upgrade --install postgres ./postgres
 
 # Install all backend applications
@@ -70,16 +69,24 @@ helm upgrade --install shop-frontend ./shop-frontend --values ./shop-frontend/va
 
 ## Access Services
 
-1. Start tunnel (for LoadBalancer services):
+- Start tunnel (for LoadBalancer services):
 
 ```bash
+cd ..
 minikube tunnel
+```
+- If there are issues with the tunnel, one could use port forwarding:
+
+```bash
+kubectl port-forward service/shop-frontend 8080:8080
 ```
 
 ## 🔍 Useful Commands
 
 ```bash
 kubectl get pods
+kubectl get services
 kubectl logs -f <pod-name>
 minikube dashboard
+minikube service list
 ```
