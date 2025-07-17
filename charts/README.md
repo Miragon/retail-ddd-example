@@ -90,3 +90,4 @@ kubectl logs -f <pod-name>
 minikube dashboard
 minikube service list
 ```
+
