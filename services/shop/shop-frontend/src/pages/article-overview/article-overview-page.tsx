@@ -71,6 +71,7 @@ export function ArticleOverviewPage() {
                 >
                     {data?.map((article) => (
                         <ArticleCard
+                            data-testid={`ArticleCard-${article.id}`}
                             key={article.id}
                             article={article}
                             clickOnCard={navigateToArticleDetails}
