@@ -79,6 +79,7 @@ Within this monorepo, we are using a variety of technologies to keep things inte
    ```
 
 4. Start the services
+
    **a) locally**
    Run all provided configs within IntelliJ
 
