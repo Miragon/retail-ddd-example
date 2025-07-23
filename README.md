@@ -60,17 +60,29 @@ Within this monorepo, we are using a variety of technologies to keep things inte
 
 1. **Fire up the infrastructure** (grab a coffee, this takes a moment):
    ```bash
-   cd charts
    minikube start
+   kubectl config use-context minikube
+   minikube tunnel # keep the terminal open
+   ```
+   
+2. **Deploy database to minikube**:
+   ```bash
+   cd charts
+   helm dependency build ./postgres
    helm upgrade --install postgres ./postgres
+   kubectl get po -w # Wait until the database pod is ready
    ```
 
-2. **Build everything** (grab another coffee):
+3. **Build everything** (grab another coffee):
    ```bash
    ./gradlew build
    ```
 
-3. **Deploy to Minikube** (you know the drill):
+4. Start the services
+   **a) locally**
+   Run all provided configs within IntelliJ
+
+   **b) within Minikube** (you know the drill):
    ```bash
    # Build all the images
    minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
@@ -80,11 +92,6 @@ Within this monorepo, we are using a variety of technologies to keep things inte
    
    # Deploy the shop
    helm upgrade --install shop-backend ./shop-backend --values ./shop-backend/values.local.yaml
-   ```
-
-4. **Access your empire**:
-   ```bash
-   minikube tunnel  # Opens the gates to your digital kingdom
    ```
 
 ## 🏗️ Architecture: It's Hexagonal, Darling
