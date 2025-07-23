@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="retail-application" type="CompoundRunConfigurationType">
+    <toRun name="ShopFrontend" type="js.build_tools.npm" />
+    <toRun name="DeliveryBackend" type="SpringBootApplicationConfigurationType" />
+    <toRun name="ShopBackend" type="SpringBootApplicationConfigurationType" />
+    <toRun name="WarehouseBackend" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
