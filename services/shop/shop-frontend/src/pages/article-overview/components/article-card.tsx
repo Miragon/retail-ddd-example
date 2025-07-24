@@ -6,10 +6,11 @@ import {useAddToCart} from "../../../hooks/cart.hook";
 interface ArticleProps {
     article: ArticleDto
     clickOnCard: (articleId: string) => void
+    testId?: string
 }
 
 export const ArticleCard: React.FC<ArticleProps> = props => {
-    const {article} = props;
+    const {article, testId} = props;
     const addToCartMutation = useAddToCart();
     const [showSuccess, setShowSuccess] = useState(false);
 
@@ -29,6 +30,7 @@ export const ArticleCard: React.FC<ArticleProps> = props => {
     return (
         <>
             <Card
+                data-testid={testId}
                 elevation={2}
                 sx={{
                     height: '100%',
@@ -53,6 +55,7 @@ export const ArticleCard: React.FC<ArticleProps> = props => {
                 </CardContent>
                 <CardActions>
                     <Button
+                        data-testid={`${testId}-Button`}
                         variant="contained"
                         color="primary"
                         onClick={handleAddToCart}

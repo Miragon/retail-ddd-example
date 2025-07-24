@@ -6,4 +6,4 @@
 💡 Die Tests setzen voraus, dass die passenden Testdaten geladen sind!
 </aside>
 
-[basic.spec.ts](Testspecifications/basic.md)
+[menuBar.spec.ts](Testspecifications/menuBar.md)

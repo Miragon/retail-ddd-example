@@ -41,6 +41,7 @@ export function ArticleOverviewPage() {
 
             <If condition={!hasArticles}>
                 <Box
+                    data-testid={"Box-NoArticles"}
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
@@ -60,6 +61,7 @@ export function ArticleOverviewPage() {
 
             <If condition={hasArticles}>
                 <Box
+                    data-testid={"Box-HasArticles"}
                     display="grid"
                     gridTemplateColumns={{
                         xs: 'repeat(1, 1fr)',
@@ -71,7 +73,7 @@ export function ArticleOverviewPage() {
                 >
                     {data?.map((article) => (
                         <ArticleCard
-                            data-testid={`ArticleCard-${article.id}`}
+                            testId={`ArticleCard-${article.id}`}
                             key={article.id}
                             article={article}
                             clickOnCard={navigateToArticleDetails}

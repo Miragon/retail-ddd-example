@@ -78,6 +78,7 @@ minikube tunnel
 - If there are issues with the tunnel, one could use port forwarding:
 
 ```bash
+kubectl port-forward service/postgres-postgresql 5432:5432
 kubectl port-forward service/shop-frontend 8080:8080
 ```
 
