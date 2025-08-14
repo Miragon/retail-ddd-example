@@ -16,5 +16,6 @@ dependencyResolutionManagement {
 include("services:warehouse:warehouse-backend")
 include("services:delivery:delivery-backend")
 include("services:shop:shop-backend")
+include("services:shop:shop-mcp-client")
 
 rootProject.name = "retail-ddd-example"

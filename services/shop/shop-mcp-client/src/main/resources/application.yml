@@ -1,6 +1,15 @@
+server:
+  port: 8085
+
+shop:
+  backend:
+    url: http://localhost:8081
+
 logging:
   pattern:
-    console:
+    console: "%nopex"
+  level:
+    root: OFF
 
 spring:
   main:

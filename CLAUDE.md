@@ -26,6 +26,7 @@ This is a multi-module Gradle project using Kotlin and Spring Boot. Java 21 is r
 ./gradlew :services:shop:shop-backend:bootRun
 ./gradlew :services:delivery:delivery-backend:bootRun
 ./gradlew :services:warehouse:warehouse-backend:bootRun
+./gradlew :services:shop:shop-mcp-client:bootRun
 ```
 
 **Run single test:**
@@ -69,6 +70,7 @@ This project implements Domain-Driven Design (DDD) with Hexagonal Architecture a
 - **shop-backend**: Main e-commerce service with full CRUD, persistence, and security
 - **delivery-backend**: Delivery domain service (in-memory storage)
 - **warehouse-backend**: Warehouse domain service (in-memory storage)
+- **shop-mcp-client**: Model Context Protocol (MCP) client providing AI tools for article queries
 - **shop-frontend**: React SPA with Material-UI
 - **shop-e2e**: Cypress end-to-end tests
 
@@ -180,6 +182,53 @@ minikube tunnel  # Enable LoadBalancer access
 - **E2E tests**: Cypress for full user workflows
 
 Always run `./gradlew test` before committing to ensure architecture compliance and functionality.
+
+## MCP (Model Context Protocol) Integration
+
+The project includes a dedicated MCP client (`shop-mcp-client`) that provides AI tools for querying article data. It communicates with the shop-backend via REST API using public endpoints (no authentication required for article browsing).
+
+### MCP Architecture
+
+The MCP module has a flat, simplified structure:
+
+```
+services/shop/shop-mcp-client/
+├── inbound/     # ArticleTools directly
+└── outbound/    # ShopApiClient + Configuration
+```
+
+### Running MCP Client
+
+1. **Start shop-backend first** (required dependency):
+```bash
+./gradlew :services:shop:shop-backend:bootRun
+```
+
+2. **Start MCP client**:
+```bash
+./gradlew :services:shop:shop-mcp-client:bootRun
+```
+
+The MCP client runs on port 8085 and connects to shop-backend on port 8081.
+
+### Available MCP Tools
+
+- `getArticles()`: Retrieves all articles from the shop (public endpoint)
+- `getArticleById(id: String)`: Retrieves a specific article by ID (public endpoint)
+
+**Note:** MCP tools only provide read-only access to the product catalog. Cart operations and order placement require user authentication through the web frontend.
+
+### Configuration
+
+MCP client settings can be configured in `services/shop/shop-mcp-client/src/main/resources/application.yml`:
+
+```yaml
+shop:
+  backend:
+    url: http://localhost:8081  # Shop backend URL
+```
+
+The client activates the `mcp-server` profile automatically and provides Spring AI MCP tools for integration with Claude Desktop and other MCP clients.
 
 ## Implementation Guidelines
 
