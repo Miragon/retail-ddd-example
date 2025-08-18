@@ -24,10 +24,12 @@ Think of it as giving AI assistants a direct hotline to our tech shop inventory.
 
 **What MCP clients can do with our server:**
 
-- 🔍 Browse all available articles
+- 🔍 Browse all available articles (no authentication required)
 - 📱 Get detailed info about specific products
 - 💬 Help you find the perfect tech gear
-- 🛒 Basically become your personal tech shopping assistant
+- 🛒 Basically become your personal tech shopping assistant for browsing
+
+**Note:** The MCP client provides read-only access to the product catalog. Shopping cart and order operations require user authentication through the web frontend.
 
 ## 🚀 Setting Up with Claude Desktop
 
@@ -51,15 +53,15 @@ It's hiding in different places depending on your OS:
 %APPDATA%\Claude\claude_desktop_config.json
 ```
 
-### Step 2: Build the Shop Backend
+### Step 2: Build the MCP Client
 
-Before Claude can talk to our shop, we need to build it:
+Before Claude can talk to our shop, we need to build the MCP client:
 
 ```bash
-./gradlew :services:shop:shop-backend:build
+./gradlew :services:shop:shop-mcp-client:build
 ```
 
-This creates the JAR file that Claude will use to start our MCP server.
+This creates the JAR file that Claude will use to start our MCP server. The MCP client will connect to the shop backend to fetch article data.
 
 ### Step 3: Configure the MCP Magic
 
@@ -73,10 +75,9 @@ Open your `claude_desktop_config.json` file and add this configuration:
       "description": "A tech shop called nerd alert where you can buy all kinds of tech stuff.",
       "command": "java",
       "args": [
-        "-Dspring.profiles.active=mcp-server",
         "-Dspring.ai.mcp.server.stdio=true",
         "-jar",
-        "/path/to/your/project/services/shop/shop-backend/build/libs/shop-backend.jar"
+        "/path/to/your/project/services/shop/shop-mcp-client/build/libs/shop-mcp-client.jar"
       ]
     }
   }
@@ -90,12 +91,18 @@ You should now see the "Nerd Alert Shop" MCP server available in your Claude int
 
 ## 🎪 How It Works Under the Hood
 
-Our MCP server exposes two main tools that Claude can use:
+Our MCP client acts as a bridge between Claude and the shop backend:
 
-1. **`getArticles()`** - Fetches all available articles in our shop
+1. **MCP Client** (`shop-mcp-client`) - Runs locally and exposes MCP tools to Claude
+2. **Shop Backend** (`shop-backend`) - Provides REST API with article data
+3. **Communication** - MCP client makes HTTP requests to backend's public article endpoints
+
+**Available MCP Tools:**
+
+1. **`getArticles()`** - Fetches all available articles from the shop backend
 2. **`getArticleById(id)`** - Gets detailed info about a specific article
 
-These tools are implemented in `ArticleTools.kt` and configured via the `mcp-server` Spring profile.
+These tools are implemented in `ArticleTools.kt` and make REST calls to `/api/articles` (no authentication required).
 
 ## 🎉 Testing Your Setup
 
@@ -123,6 +130,8 @@ Claude will use the MCP server to fetch real data from our shop backend and prov
 
 **Articles not showing up?**
 
-- The shop backend uses postgres that must be running in minikube
-- Test data is automatically imported when the server starts
-- Check the logs for any database connection issues
+- Ensure the shop backend is running on port 8081: `./gradlew :services:shop:shop-backend:bootRun`
+- The shop backend must have access to its database (postgres in minikube for production, H2 for local dev)
+- Test data is automatically imported when the backend starts
+- Check that the MCP client can reach the backend at `http://localhost:8081`
+- Verify article endpoints are accessible: `curl http://localhost:8081/api/articles`
