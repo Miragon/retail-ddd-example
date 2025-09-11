@@ -10,10 +10,10 @@
 | Test Aktion       | Navigiere zu den Bestellungen .                |
 | Test Verifikation | Prüfen ob die Bestellungen Seite sichtbar ist? |
 
-| Nummer            | #unn                                  |
-|-------------------|---------------------------------------|
-| Test Aktion       | Navigiere zum Warenkorb.              |
-| Test Verifikation | Prüfen ob der Warenkorb sichtbar ist? |
+| Nummer            | #unn                                             |
+|-------------------|--------------------------------------------------|
+| Test Aktion       | Artikel in den Warenkorb.                        |
+| Test Verifikation | Prüfen ob der Artikel im Warenkorb sichtbar ist? |
 
 | Nummer            | #prb                                       |
 |-------------------|--------------------------------------------|

@@ -7,21 +7,24 @@ declare global {
     }
 }
 
-export const TESTID = {
+export const DATA_TESTID = Object.freeze({
     AUTH0: {
-       USERNAME: "input#username",
-       PASSWORD: "input#password",
-       SUBMIT: "button[data-action-button-primary=true]:contains(Continue)"
+        USERNAME: "input#username",
+        PASSWORD: "input#password",
+        SUBMIT: "button[data-action-button-primary=true]:contains(Continue)"
     },
-    MENU: {
+    SHOP_MENU: {
         ORDERS: "button[title='Orders']",
         CART: "button[title='Cart']",
         LOGOUT: "button:contains(Logout)",
     },
-    ARTICLES: {
-        ARTICLE_CARD_PREFIX: "ArticleCard",
+    SHOP_ARTICLES: {
+        CARD: "ArticleCard",
+        ADD_TO_CART: (id: string): string => {
+            return `ArticleCard-${id}-Button`
+        }
     },
-    ORDERS: {
+    SHOP_ORDERS: {
         EMPTY: {
             BUTTON_CONTINUE_SHOPPING: "Orders-Overview-Empty-Button-ContinueShopping",
             ROOT: "Orders-Overview-Empty"
@@ -30,23 +33,24 @@ export const TESTID = {
         BUTTON_VIEW_ORDER_PREFIX: "Orders-Overview-Button-ViewOrder",
         ROOT: "Orders-Overview"
     },
-    CART: {
-        EMPTY : {
+    SHOP_CART: {
+        EMPTY: {
             BUTTON_CONTINUE_SHOPPING: "Cart-Empty-Button-ContinueShopping"
         },
-        CART_ICON_BUTTON_PREFIX: "Cart-IconButton",
-        CART_BUTTON_CONTINUE_SHOPPING: "Cart-Button-ContinueShopping",
-        CART_BUTTON_COMPLETE_ORDER: "Cart-Button-CompleteOrder",
+        ICON_BUTTON: "Cart-IconButton",
+        BUTTON_CONTINUE_SHOPPING: "Cart-Button-ContinueShopping",
+        BUTTON_COMPLETE_ORDER: "Cart-Button-CompleteOrder",
     }
-}
-export const API = {
+});
+export const API = Object.freeze({
     ARTICLES: "/api/articles",
     ORDERS: "/api/orders"
-}
-export const PAGES = {
-    TOKEN: `https://${Cypress.env("auth0Domain")}/oauth/token`,
+});
+export const PAGE = Object.freeze({
     ARTICLES: "/articles"
-}
+});
+
+const TOKEN = `https://${Cypress.env("auth0Domain")}/oauth/token`;
 
 Cypress.Commands.add("login", (username = Cypress.env("auth0Username"), password = Cypress.env("auth0Password")) => {
     Cypress.log({
@@ -57,21 +61,20 @@ Cypress.Commands.add("login", (username = Cypress.env("auth0Username"), password
     cy.session(
         `${username}-${Cypress.spec.name}`,
         () => {
-            const AUTH0 = TESTID.AUTH0;
-            cy.intercept("POST", PAGES.TOKEN).as("token");
+            const {AUTH0} = DATA_TESTID;
+            cy.intercept("POST", TOKEN).as("token");
             cy.clearAllSessionStorage();
             cy.clearAllCookies();
             cy.clearAllLocalStorage();
             // App landing page redirects to Auth0.
             cy.visit("/")
             cy.get(AUTH0.USERNAME).should("be.visible");
-            // Login to Auth0 and receive token.
+            // Login to Auth0 and receive the token.
             cy.origin(
                 Cypress.env("auth0Domain"),
                 {args: {username, password, AUTH0}},
                 ({username, password, AUTH0}) => {
                     cy.get(AUTH0.SUBMIT).as("submit");
-                    //cy.contains("button[data-action-button-primary=true]", "Continue").as("submit");
                     cy.get("@submit").should("be.visible");
                     cy.get(AUTH0.USERNAME).as("un");
                     cy.get("@un").clear();
@@ -90,7 +93,7 @@ Cypress.Commands.add("login", (username = Cypress.env("auth0Username"), password
                     cy.get("@pw")
                         .should("have.value", password);
                     cy.get("@submit").click();
-                    // receive the token, next get redirected
+                    // wait for the token, then get redirected
                     cy.wait("@token");
                 }
             );
@@ -108,5 +111,5 @@ Cypress.Commands.add("login", (username = Cypress.env("auth0Username"), password
             },
             cacheAcrossSpecs: false
         }); // blank page
-    cy.get("[data-cy='cypress-logo']").should("be.visible"); // wait for blank page
+    cy.get("[data-cy='cypress-logo']").should("be.visible"); // wait for the blank page
 });
