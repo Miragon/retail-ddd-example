@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/services/delivery/delivery-backend" />
             <option value="$PROJECT_DIR$/services/shop" />
             <option value="$PROJECT_DIR$/services/shop/shop-backend" />
+            <option value="$PROJECT_DIR$/services/shop/shop-mcp-client" />
             <option value="$PROJECT_DIR$/services/warehouse" />
             <option value="$PROJECT_DIR$/services/warehouse/warehouse-backend" />
           </set>

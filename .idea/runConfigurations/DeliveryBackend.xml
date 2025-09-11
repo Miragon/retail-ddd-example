@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DeliveryBackend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="retail-ddd-example.services.delivery.delivery-backend.main" />
+    <module name="delivery.delivery-backend.retail-ddd-example.services.delivery.delivery-backend.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.miragon.app.io.miragon.shop.DeliveryApplication" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
