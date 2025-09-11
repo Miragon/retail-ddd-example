@@ -14,6 +14,7 @@ export default defineConfig({
     videosFolder: "videos",
     screenshotsFolder: "screenshots",
     trashAssetsBeforeRuns: true,
+
     component: {
         devServer: {
             framework: "react",
@@ -26,6 +27,7 @@ export default defineConfig({
         //baseUrl: process.env.CYPRESS_BASE_URL,
         numTestsKeptInMemory: 5,
         pageLoadTimeout: 60000,
+        experimentalStudio: true,
         specPattern: "e2e/**/*.spec.{js,jsx,ts,tsx}",
         supportFile: "support/e2e.ts",
         testIsolation: true,
