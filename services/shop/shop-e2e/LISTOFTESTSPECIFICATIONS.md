@@ -6,4 +6,4 @@
 💡 Die Tests setzen voraus, dass die passenden Testdaten geladen sind!
 </aside>
 
-[e2e/web-client/basic.spec.ts](Testspecifications/e2e-web_client-basic.md)
+[menuBar.spec.ts](Testspecifications/menuBar.md)
