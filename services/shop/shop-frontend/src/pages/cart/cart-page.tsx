@@ -83,6 +83,7 @@ export function CartPage() {
                         Add some items to get started!
                     </Typography>
                     <Button
+                        data-testid="Cart-Empty-Button-ContinueShopping"
                         variant="contained"
                         color="primary"
                         sx={{mt: 2}}
@@ -100,6 +101,7 @@ export function CartPage() {
                                 <ListItem
                                     secondaryAction={
                                         <IconButton
+                                            data-testid={`Cart-IconButton-${item.articleId}`}
                                             sx={{mr: 0.5}}
                                             edge="end"
                                             aria-label="remove"
@@ -146,12 +148,14 @@ export function CartPage() {
 
                         <Box display="flex" gap={2} flexDirection={{xs: 'column', sm: 'row'}}>
                             <Button
+                                data-testid="Cart-Button-ContinueShopping"
                                 variant="outlined"
                                 onClick={handleContinueShopping}
                                 sx={{flex: 1}}>
                                 Continue Shopping
                             </Button>
                             <Button
+                                data-testid="Cart-Button-CompleteOrder"
                                 variant="contained"
                                 color="primary"
                                 onClick={handleCompleteOrder}

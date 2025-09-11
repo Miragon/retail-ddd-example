@@ -52,7 +52,8 @@ export function OrdersOverviewPage() {
             </Typography>
 
             <If condition={!hasOrders}>
-                <Box 
+                <Box
+                    data-testid="Orders-Overview-Empty"
                     display="flex" 
                     flexDirection="column" 
                     alignItems="center" 
@@ -68,6 +69,7 @@ export function OrdersOverviewPage() {
                         When you place an order, it will appear here.
                     </Typography>
                     <Button
+                        data-testid="Orders-Overview-Empty-Button-ContinueShopping"
                         variant="contained"
                         color="primary"
                         onClick={handleContinueShopping}
@@ -79,7 +81,8 @@ export function OrdersOverviewPage() {
             </If>
 
             <If condition={hasOrders}>
-                <Box 
+                <Box
+                    data-testid="Orders-Overview"
                     display="grid" 
                     gridTemplateColumns={{
                         xs: 'repeat(1, 1fr)',
@@ -119,6 +122,7 @@ export function OrdersOverviewPage() {
 
                             <CardActions>
                                 <Button
+                                    data-testid={`Orders-Overview-Button-ViewOrder-${order.id}`}
                                     size="small"
                                     variant="outlined"
                                     onClick={() => handleViewOrder(order.id)}
@@ -133,6 +137,7 @@ export function OrdersOverviewPage() {
 
                 <Box display="flex" justifyContent="center" mt={4}>
                     <Button
+                        data-testid="Orders-Overview-Button-ContinueShopping"
                         variant="contained"
                         color="primary"
                         onClick={handleContinueShopping}

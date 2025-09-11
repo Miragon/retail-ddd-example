@@ -1,0 +1,61 @@
+name: "Run Cypress E2E Tests"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "9 3 * * 1-5"  # Every day at midnight
+
+jobs:
+  minikube:
+    name: Start Kubernetes cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Minikube
+        id: minikube
+        uses: hiberbee/github-action-minikube@latest
+        with:
+          profile: github
+
+      - name: Get Minikube status
+        run: minikube status
+
+      - name: Get cluster info
+        run: kubectl cluster-info
+
+      - name: Get Kubernetes pods
+        run: kubectl get services --all-namespaces
+
+      - name: Get Minikube IP
+        run: echo ${{ steps.minikube.outputs.ip }}
+
+      - name: Get Docker containers
+        run: docker ps
+
+      - name: Get Helm releases
+        uses: hiberbee/github-action-helm@latest
+        with:
+          helm-command: list
+  #minikube:
+  #  name: Minikube
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v4
+  #      with:
+  #        repository: medyagh/local-dev-example-with-minikube
+  #    - name: Start minikube
+  #      uses: medyagh/setup-minikube@latest
+  #    - name: Try the cluster!
+  #      run: kubectl get pods -A
+  #    - name: Build image
+  #      run: |
+  #        minikube image build -t local/devex:v1 .
+  #    - name: Deploy to minikube
+  #      run:
+  #        kubectl apply -f deploy/k8s.yaml
+  #        kubectl wait --for=condition=ready pod -l app=local-devex
+  #    - name: Test service URLs
+  #      run: |
+  #        minikube service list
+  #        minikube service local-devex-svc --url
+  #        echo "------------------opening the service------------------"
+  #        curl $(minikube service local-devex-svc --url)
