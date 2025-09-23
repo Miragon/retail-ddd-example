@@ -22,6 +22,16 @@ export const DATA_TESTID = Object.freeze({
         CARD: "ArticleCard",
         ADD_TO_CART: (id: string): string => {
             return `ArticleCard-${id}-Button`
+        },
+        ITEMS: {
+            SAMSUNG: {
+                ID: "f2b5c8a0-1d3e-4c5b-9f3e-7d6f8a2b1c3d",
+                DESCRIPTION: "Samsung 980 PRO 1TB SSD"
+            },
+            KEYCHRON: {
+                ID: "d7e9a1e0-1234-4c5b-9876-abcdef123456",
+                DESCRIPTION: "Keychron K2 Mechanical Keyboard"
+            }
         }
     },
     SHOP_ORDERS: {
@@ -31,13 +41,18 @@ export const DATA_TESTID = Object.freeze({
         },
         BUTTON_CONTINUE_SHOPPING: "Orders-Overview-Button-ContinueShopping",
         BUTTON_VIEW_ORDER_PREFIX: "Orders-Overview-Button-ViewOrder",
-        ROOT: "Orders-Overview"
+        ROOT: "Orders-Overview",
+        DETAILS: {
+            CHECK_CIRCLE_ICON: "Order-Details-CheckCircleIcon",
+            ITEMS: "Order-Details-ListItems",
+        }
     },
     SHOP_CART: {
         EMPTY: {
             BUTTON_CONTINUE_SHOPPING: "Cart-Empty-Button-ContinueShopping"
         },
         ICON_BUTTON: "Cart-IconButton",
+        LIST: "Cart-Page-List",
         BUTTON_CONTINUE_SHOPPING: "Cart-Button-ContinueShopping",
         BUTTON_COMPLETE_ORDER: "Cart-Button-CompleteOrder",
     }
@@ -47,7 +62,9 @@ export const API = Object.freeze({
     ORDERS: "/api/orders"
 });
 export const PAGE = Object.freeze({
-    ARTICLES: "/articles"
+    ARTICLES: "/articles",
+    ORDERS: "/orders",
+    CART: "/cart"
 });
 
 const TOKEN = `https://${Cypress.env("auth0Domain")}/oauth/token`;

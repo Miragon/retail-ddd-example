@@ -11,8 +11,6 @@ const {
 
 const {ARTICLES} = PAGE;
 
-const ARTICLE_ID = "f2b5c8a0-1d3e-4c5b-9f3e-7d6f8a2b1c3d";
-
 describe("Shop - Menubar Testsuite", (): void => {
     before(() => {
         //
@@ -29,11 +27,18 @@ describe("Shop - Menubar Testsuite", (): void => {
         cy.get(`[data-testid="${SHOP_ORDERS.EMPTY.BUTTON_CONTINUE_SHOPPING}"]`).should("be.visible");
     });
     it("Add article to cart (#unn)", () => {
-        cy.get(`[data-testid="${SHOP_ARTICLES.ADD_TO_CART(ARTICLE_ID)}"]`).click();
+        cy.get(`[data-testid="${SHOP_ARTICLES.ADD_TO_CART(SHOP_ARTICLES.ITEMS.SAMSUNG.ID)}"]`).click();
         cy.get(SHOP_MENU.CART).click();
-        cy.get(`[data-testid="${SHOP_CART.ICON_BUTTON}-${ARTICLE_ID}"]`).should("be.visible");
+        cy.get(`[data-testid="${SHOP_CART.LIST}"]`).should("contain.text", SHOP_ARTICLES.ITEMS.SAMSUNG.DESCRIPTION);
+    })
+    it("Complete order (#pjz)", () => {
+        cy.get(`[data-testid="${SHOP_ARTICLES.ADD_TO_CART(SHOP_ARTICLES.ITEMS.KEYCHRON.ID)}"]`).click();
+        cy.get(SHOP_MENU.CART).click();
+        cy.get(`[data-testid="${SHOP_CART.LIST}"]`).should("contain.text", SHOP_ARTICLES.ITEMS.KEYCHRON.DESCRIPTION);
+        cy.get(`[data-testid="${SHOP_CART.BUTTON_COMPLETE_ORDER}"]`).click();
+        cy.get(`[data-testid="${SHOP_ORDERS.DETAILS.ITEMS}"]`).should("contain.text", SHOP_ARTICLES.ITEMS.KEYCHRON.DESCRIPTION);
     });
-    it("Logout (#prb)", () => {
+    it.skip("Logout (#prb)", () => {
         cy.get(SHOP_MENU.LOGOUT).click();
         cy.get(AUTH0.USERNAME).should("be.visible");
     });

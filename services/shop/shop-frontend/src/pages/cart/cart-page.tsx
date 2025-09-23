@@ -95,7 +95,7 @@ export function CartPage() {
 
             <If condition={!isCartEmpty(cart)}>
                 <Paper elevation={2} sx={{mt: 2}}>
-                    <List>
+                    <List data-testid={"Cart-Page-List"}>
                         {cart?.items.map((item, index) => (
                             <React.Fragment key={item.articleId}>
                                 <ListItem
