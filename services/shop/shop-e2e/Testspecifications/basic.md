@@ -15,6 +15,11 @@
 | Test Aktion       | Artikel in den Warenkorb.                        |
 | Test Verifikation | Prüfen ob der Artikel im Warenkorb sichtbar ist? |
 
+| Nummer            | #pjz                                                 |
+|-------------------|------------------------------------------------------|
+| Test Aktion       | Artikel in den Warenkorb u. Bestellung abschliessen. |
+| Test Verifikation | Prüfen ob die Bestellung ausgeführt wurde?           |
+
 | Nummer            | #prb                                       |
 |-------------------|--------------------------------------------|
 | Test Aktion       | Abmelden.                                  |

@@ -55,14 +55,14 @@ export function OrderDetailsPage() {
     return (
         <Box maxWidth="800px" margin="0 auto" padding="2rem">
             <Box display="flex" alignItems="center" mb={3}>
-                <CheckCircleIcon sx={{mr: 2, color: 'success.main', fontSize: 32}}/>
+                <CheckCircleIcon sx={{mr: 2, color: 'success.main', fontSize: 32}} data-testid={"Order-Details-CheckCircleIcon"}/>
                 <Typography variant="h4" component="h1">
                     Order Confirmed!
                 </Typography>
             </Box>
 
             <Paper elevation={2} sx={{p: 3, mb: 3}}>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2} data-testid={"Order-Details-Box-Status"}>
                     <Typography variant="h6">
                         <ReceiptIcon sx={{mr: 1, verticalAlign: 'middle'}}/>
                         Order #{orderData.id.slice(-8).toUpperCase()}
@@ -86,7 +86,7 @@ export function OrderDetailsPage() {
                 <List>
                     {orderData.items.map((item, index) => (
                         <React.Fragment key={item.articleId}>
-                            <ListItem>
+                            <ListItem data-testid={"Order-Details-ListItems"}>
                                 <ListItemText
                                     primary={item.articleName}
                                     secondary={
@@ -110,7 +110,7 @@ export function OrderDetailsPage() {
                 <Divider/>
 
                 <Box sx={{p: 2}}>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Box display="flex" justifyContent="space-between" alignItems="center" data-testid={"Order-Details-Box-Amount"}>
                         <Typography variant="h6">
                             Total Amount:
                         </Typography>
@@ -130,6 +130,7 @@ export function OrderDetailsPage() {
 
             <Box display="flex" gap={2} justifyContent="center">
                 <Button
+                    data-testid={"Order-Details-Button-ContinueShopping"}
                     variant="contained"
                     color="primary"
                     onClick={handleContinueShopping}>
