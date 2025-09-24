@@ -69,7 +69,7 @@ export const PAGE = Object.freeze({
 
 const TOKEN = `https://${Cypress.env("auth0Domain")}/oauth/token`;
 
-Cypress.Commands.add("login", (username = Cypress.env("auth0Username"), password = Cypress.env("auth0Password")) => {
+Cypress.Commands.add("login", function (username = Cypress.env("auth0Username"), password = Cypress.env("auth0Password")) {
     Cypress.log({
         displayName: "AUTH0 LOGIN",
         message: [`🔐 Session | ${Cypress.spec.name}`]
