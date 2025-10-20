@@ -1,4 +1,4 @@
-# e2e/menuBar.spec.ts
+# e2e/basic.spec.ts
 
 ### beforeEach Hook:
 - Anmelden u. eine Seite besuchen.
@@ -19,6 +19,11 @@
 |-------------------|------------------------------------------------------|
 | Test Aktion       | Artikel in den Warenkorb u. Bestellung abschliessen. |
 | Test Verifikation | Prüfen ob die Bestellung ausgeführt wurde?           |
+
+| Nummer            | #izv                                  |
+|-------------------|---------------------------------------|
+| Test Aktion       | Artikel aus dem Warenkorb löschen.    |
+| Test Verifikation | Prüfen ob der Artikel gelöscht wurde? |
 
 | Nummer            | #prb                                       |
 |-------------------|--------------------------------------------|

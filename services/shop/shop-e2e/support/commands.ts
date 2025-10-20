@@ -13,6 +13,7 @@ export const DATA_TESTID = Object.freeze({
         PASSWORD: "input#password",
         SUBMIT: "button[data-action-button-primary=true]:contains(Continue)"
     },
+    // Cart-IconButton-f2b5c8a0-1d3e-4c5b-9f3e-7d6f8a2b1c3d
     SHOP_MENU: {
         ORDERS: "button[title='Orders']",
         CART: "button[title='Cart']",
@@ -31,6 +32,14 @@ export const DATA_TESTID = Object.freeze({
             KEYCHRON: {
                 ID: "d7e9a1e0-1234-4c5b-9876-abcdef123456",
                 DESCRIPTION: "Keychron K2 Mechanical Keyboard"
+            },
+            SONY_HEADPHONES: {
+                ID: "0f5e45d3-aaa3-4cde-a1b2-9e8f0d1a2b3c",
+                DESCRIPTION: "Sony WH-1000XM5 Headphones"
+            },
+            LG: {
+                ID: "d4e5f6a7-b8c9-7d8e-2f3a-1b2c3d4e5f6a",
+                DESCRIPTION: "LG 34WN80C-B UltraWide Monitor"
             }
         }
     },
@@ -55,6 +64,7 @@ export const DATA_TESTID = Object.freeze({
         LIST: "Cart-Page-List",
         BUTTON_CONTINUE_SHOPPING: "Cart-Button-ContinueShopping",
         BUTTON_COMPLETE_ORDER: "Cart-Button-CompleteOrder",
+        REMOVE: "Cart-IconButton"
     }
 });
 export const API = Object.freeze({
