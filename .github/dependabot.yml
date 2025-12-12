@@ -8,6 +8,8 @@ updates:
       interval: monthly
     labels:
       - "Technical Debt"
+    assignees:
+      - "emaarco"
 
   # Config for all gradle dependencies
   - package-ecosystem: "gradle"
@@ -17,6 +19,8 @@ updates:
       interval: monthly
     labels:
       - "Technical Debt"
+    assignees:
+      - "emaarco"
     groups:
       backend-dependencies:
         patterns:
@@ -33,6 +37,8 @@ updates:
       interval: "monthly"
     labels:
       - "Technical Debt"
+    assignees:
+      - "emaarco"
     groups:
       frontend-dependencies:
         patterns:
