@@ -19,7 +19,7 @@ class GetCartController(
     private val log = KotlinLogging.logger {}
 
     @GetMapping
-    fun getCart(@AuthenticationPrincipal jwt: Jwt): ResponseEntity<CartDto?> {
+    fun getCart(@AuthenticationPrincipal jwt: Jwt): ResponseEntity<CartDto> {
         val userId = UserId(jwt.subject)
         log.info { "Getting cart for user: $userId" }
         val cart = query.getCart(userId)

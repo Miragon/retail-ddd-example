@@ -15,11 +15,7 @@ class ShopApiClient(
         val url = "${shopBackendProperties.url}/api/articles"
         val responseType = object : ParameterizedTypeReference<List<ArticleResponseDto>>() {}
         val response = restTemplate.exchange(url, HttpMethod.GET, null, responseType)
-        return if (response.body == null) {
-            emptyList()
-        } else {
-            response.body.map { it.toArticleData() }
-        }
+        return response.body?.map { it.toArticleData() } ?: emptyList()
     }
 
     fun loadById(id: String): ArticleData {
