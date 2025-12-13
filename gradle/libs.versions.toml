@@ -22,6 +22,9 @@ springAiMcpServer = { module = 'org.springframework.ai:spring-ai-starter-mcp-ser
 
 # testing
 springBootTest = { module = 'org.springframework.boot:spring-boot-starter-test', version.ref = "springBoot" }
+springBootWebMvcTest = { module = 'org.springframework.boot:spring-boot-starter-webmvc-test', version.ref = "springBoot" }
+springBootDataJpaTest = { module = 'org.springframework.boot:spring-boot-starter-data-jpa-test', version.ref = "springBoot" }
+springBootSecurityTest = { module = 'org.springframework.boot:spring-boot-starter-security-test', version.ref = "springBoot" }
 mockk = { module = "io.mockk:mockk", version = "1.14.7" }
 springMockk = { module = "com.ninja-squad:springmockk", version = "5.0.1" }
 h2 = { module = 'com.h2database:h2', version = "2.4.240" }
@@ -33,7 +36,7 @@ openApi = ["springDoc", "jacksonModuleKotlin"]
 security = ["springSecurity", "springBootOAuthServer"]
 webService = ["kotlinLogging", "springBootWeb", "springBootActuator"]
 database = ["springBootJpa", "postgresql"]
-commonTest = ["springBootTest", "mockk", "springMockk", "archunit"]
+commonTest = ["springBootTest", "springBootWebMvcTest", "springBootDataJpaTest", "springBootSecurityTest", "mockk", "springMockk", "archunit"]
 
 [plugins]
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }

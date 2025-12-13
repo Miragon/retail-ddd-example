@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="WarehouseBackend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="services.warehouse.warehouse-backend.retail-ddd-example.services.warehouse.warehouse-backend.main" />
+    <module name="retail-ddd-example.services.warehouse.warehouse-backend.main~2" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.miragon.app.io.miragon.delivery.WarehouseApplication" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
