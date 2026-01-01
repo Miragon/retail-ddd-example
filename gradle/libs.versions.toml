@@ -3,13 +3,13 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-kotlin = "2.2.21"
-springBoot = "4.0.0"
+kotlin = "2.3.0"
+springBoot = "4.0.1"
 springGradleDependencyManagement = "1.1.7"
 springAi = "1.1.2"
 
 [libraries]
-kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.13" }
+kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.14" }
 springSecurity = { module = 'org.springframework.boot:spring-boot-starter-security', version.ref = "springBoot" }
 springBootWeb = { module = 'org.springframework.boot:spring-boot-starter-web', version.ref = "springBoot" }
 springBootActuator = { module = 'org.springframework.boot:spring-boot-starter-actuator', version.ref = "springBoot" }
