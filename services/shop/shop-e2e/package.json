@@ -6,10 +6,12 @@
   "scripts": {
     "cy": "node --env-file=.env.local support/cy.mjs",
     "cy:all": "node --env-file=.env.local support/cy.mjs all",
-    "cy:spec": "node --env-file=.env.local support/cy.mjs spec"
+    "cy:spec": "node --env-file=.env.local support/cy.mjs spec",
+    "cy:createReport": "node support/cy.mjs createReport"
   },
   "devDependencies": {
-    "cypress": "^15.5.0",
+    "cypress": "^15.10.0",
+    "fs-extra": "11.3.3",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",
     "mochawesome-report-generator": "^6.2.0",

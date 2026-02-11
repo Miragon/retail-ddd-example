@@ -1,4 +1,6 @@
 import {defineConfig} from "cypress";
+import PluginEvents = Cypress.PluginEvents;
+import PluginConfigOptions = Cypress.PluginConfigOptions;
 
 console.info('CYPRESS_BASE_URL:', process.env.CYPRESS_BASE_URL);
 console.info('AUTH0_DOMAIN:', process.env.AUTH0_DOMAIN);
@@ -9,12 +11,6 @@ export default defineConfig({
     viewportWidth: 1920,
     viewportHeight: 1080,
     defaultCommandTimeout: 5000,
-    downloadsFolder: "downloads",
-    fixturesFolder: "fixtures",
-    videosFolder: "videos",
-    screenshotsFolder: "screenshots",
-    trashAssetsBeforeRuns: true,
-
     component: {
         devServer: {
             framework: "react",
@@ -27,18 +23,25 @@ export default defineConfig({
         //baseUrl: process.env.CYPRESS_BASE_URL,
         numTestsKeptInMemory: 5,
         pageLoadTimeout: 60000,
-        experimentalStudio: true,
         specPattern: "e2e/**/*.spec.{js,jsx,ts,tsx}",
         supportFile: "support/e2e.ts",
+        downloadsFolder: "downloads",
+        fixturesFolder: "fixtures",
+        videosFolder: "videos",
+        screenshotsFolder: "screenshots",
+        trashAssetsBeforeRuns: true,
         testIsolation: true,
         chromeWebSecurity: false,
         scrollBehavior: "top",
-        reporter: "mochawesome",
+        screenshotOnRunFailure: true,
         video: false,
+        experimentalPromptCommand: false,
+        allowCypressEnv: false,
+        reporter: "mochawesome",
         reporterOptions: {
-            consoleReporter: "spec",
+            reportDir: "reports/raw",
+            reportFilename: `[name]-${process.pid}`,
             quiet: false,
-            reportDir: "reports",
             overwrite: false,
             html: false,
             json: true,
@@ -48,14 +51,16 @@ export default defineConfig({
             runMode: 1,
         },
         env: {
-            auth0Domain: process.env.AUTH0_DOMAIN,
             auth0Username: process.env.AUTH0_USERNAME,
             auth0Password: process.env.AUTH0_PASSWORD,
-            auth0ClientId: process.env.AUTH0_CLIENT_ID,
+            auth0ClientId: process.env.AUTH0_CLIENT_ID
+        },
+        expose: {
+            auth0Domain: process.env.AUTH0_DOMAIN,
             baseUrl: process.env.CYPRESS_BASE_URL
         },
         //
-        setupNodeEvents: (on, config) => {
+        setupNodeEvents: (on: PluginEvents, config: PluginConfigOptions) => {
             const CONFIG = config;
             on("before:browser:launch", (browser, launchOptions) => {
                 switch (browser.family) {
@@ -79,5 +84,5 @@ export default defineConfig({
             });
             return CONFIG;
         }
-    },
+    }
 });

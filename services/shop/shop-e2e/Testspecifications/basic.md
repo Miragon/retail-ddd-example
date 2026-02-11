@@ -1,31 +1,118 @@
-# e2e/basic.spec.ts
+# Test Specification: basic.spec.ts
 
-### beforeEach Hook:
-- Anmelden u. eine Seite besuchen.
+**Test Suite:** Shop - Menubar Testsuite
+**File:** `e2e/basic.spec.ts`
+**Purpose:** Validate core user interactions including navigation, shopping cart operations, order completion, and authentication flows.
 
-### Tests:
+## Setup
 
-| Nummer            | #ctn                                           |
-|-------------------|------------------------------------------------|
-| Test Aktion       | Navigiere zu den Bestellungen .                |
-| Test Verifikation | Prüfen ob die Bestellungen Seite sichtbar ist? |
+### Before Each Test
+1. Authenticate user via Auth0 (`cy.login()`)
+2. Navigate to articles page (`/articles`)
+3. Verify at least 10 article cards are visible
 
-| Nummer            | #unn                                             |
-|-------------------|--------------------------------------------------|
-| Test Aktion       | Artikel in den Warenkorb.                        |
-| Test Verifikation | Prüfen ob der Artikel im Warenkorb sichtbar ist? |
+## Test Cases
 
-| Nummer            | #pjz                                                 |
-|-------------------|------------------------------------------------------|
-| Test Aktion       | Artikel in den Warenkorb u. Bestellung abschliessen. |
-| Test Verifikation | Prüfen ob die Bestellung ausgeführt wurde?           |
+### Test #prb - Logout
+**Action:** User logs out of the application
+**Steps:**
+1. Click logout button in menu
+2. User is redirected to Auth0 login page
 
-| Nummer            | #izv                                  |
-|-------------------|---------------------------------------|
-| Test Aktion       | Artikel aus dem Warenkorb löschen.    |
-| Test Verifikation | Prüfen ob der Artikel gelöscht wurde? |
+**Verification:**
+- Auth0 username input field is visible
 
-| Nummer            | #prb                                       |
-|-------------------|--------------------------------------------|
-| Test Aktion       | Abmelden.                                  |
-| Test Verifikation | Prüfen ob die Auth0 Seite angezeigt wird?  |
+**Test Data:** None required
+
+---
+
+### Test #ctn - Navigate to Orders
+**Action:** User navigates to the orders overview page
+**Steps:**
+1. Click "Orders" button in navigation menu
+2. Orders page loads
+
+**Verification:**
+- Orders overview root element is visible
+
+**Test Data:** None required
+
+---
+
+### Test #unn - Add Article to Cart
+**Action:** User adds a single article to the shopping cart
+**Steps:**
+1. Click "Add to Cart" button for Samsung 980 PRO 1TB SSD
+2. Click cart icon in navigation menu
+3. Cart page displays
+
+**Verification:**
+- Cart list contains "Samsung 980 PRO 1TB SSD"
+
+**Test Data:**
+- Article: Samsung 980 PRO 1TB SSD
+- Article ID: `f2b5c8a0-1d3e-4c5b-9f3e-7d6f8a2b1c3d`
+
+---
+
+### Test #pjz - Complete Order
+**Action:** User adds an article to cart and completes the order
+**Steps:**
+1. Click "Add to Cart" button for Keychron K2 Mechanical Keyboard
+2. Navigate to cart page
+3. Verify article appears in cart list
+4. Click "Complete Order" button
+5. Order confirmation page displays
+
+**Verification:**
+- Order details page shows "Keychron K2 Mechanical Keyboard" in order items
+
+**Test Data:**
+- Article: Keychron K2 Mechanical Keyboard
+- Article ID: `d7e9a1e0-1234-4c5b-9876-abcdef123456`
+
+---
+
+### Test #izv - Remove Article from Cart
+**Action:** User adds multiple articles to cart and removes one
+**Steps:**
+1. Add LG 34WN80C-B UltraWide Monitor to cart
+2. Navigate to cart page
+3. Click "Continue Shopping" button
+4. Add Sony WH-1000XM5 Headphones to cart
+5. Navigate to cart page
+6. Verify both articles are visible in cart
+7. Click remove button for Sony headphones
+8. Verify Sony headphones are removed from cart
+
+**Verification:**
+- Cart initially contains both LG monitor and Sony headphones
+- After removal, cart no longer contains Sony headphones text
+- Cart still contains LG monitor
+
+**Test Data:**
+- Article 1: LG 34WN80C-B UltraWide Monitor
+  - ID: `d4e5f6a7-b8c9-7d8e-2f3a-1b2c3d4e5f6a`
+- Article 2: Sony WH-1000XM5 Headphones
+  - ID: `0f5e45d3-aaa3-4cde-a1b2-9e8f0d1a2b3c`
+
+---
+
+## Test Data Dependencies
+
+All tests depend on:
+- Shop backend running and accessible
+- Shop frontend running on configured `CYPRESS_BASE_URL`
+- Auth0 authentication service available
+- Test user credentials configured in `.env.local`
+- Article catalog containing at least the following items:
+  - Samsung 980 PRO 1TB SSD
+  - Keychron K2 Mechanical Keyboard
+  - LG 34WN80C-B UltraWide Monitor
+  - Sony WH-1000XM5 Headphones
+
+## Notes
+
+- All tests use isolated sessions with test isolation enabled
+- Tests have 1 retry configured in run mode
+- Each test starts with a clean authenticated session
