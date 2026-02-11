@@ -77,66 +77,73 @@ export const PAGE = Object.freeze({
     CART: "/cart"
 });
 
-const TOKEN = `https://${Cypress.env("auth0Domain")}/oauth/token`;
+const TOKEN = `https://${Cypress.expose("auth0Domain")}/oauth/token`;
 
-Cypress.Commands.add("login", function (username = Cypress.env("auth0Username"), password = Cypress.env("auth0Password")) {
+Cypress.Commands.add("login", function (username, password) {
     Cypress.log({
         displayName: "AUTH0 LOGIN",
         message: [`🔐 Session | ${Cypress.spec.name}`]
     });
     // NOTE: the session ID has to be unique for each user login to avoid conflicts
-    cy.session(
-        `${username}-${Cypress.spec.name}`,
-        () => {
-            const {AUTH0} = DATA_TESTID;
-            cy.intercept("POST", TOKEN).as("token");
-            cy.clearAllSessionStorage();
-            cy.clearAllCookies();
-            cy.clearAllLocalStorage();
-            // App landing page redirects to Auth0.
-            cy.visit("/")
-            cy.get(AUTH0.USERNAME).should("be.visible");
-            // Login to Auth0 and receive the token.
-            cy.origin(
-                Cypress.env("auth0Domain"),
-                {args: {username, password, AUTH0}},
-                ({username, password, AUTH0}) => {
-                    cy.get(AUTH0.SUBMIT).as("submit");
-                    cy.get("@submit").should("be.visible");
-                    cy.get(AUTH0.USERNAME).as("un");
-                    cy.get("@un").clear();
-                    cy.get("@un")
-                        .should("have.value", "");
-                    cy.get("@un")
-                        .type(username, {delay: 50});
-                    cy.get("@un")
-                        .should("have.value", username);
-                    cy.get(AUTH0.PASSWORD).as("pw");
-                    cy.get("@pw").clear();
-                    cy.get("@pw")
-                        .should("have.value", "");
-                    cy.get("@pw")
-                        .type(password, {delay: 50, log: false});
-                    cy.get("@pw")
-                        .should("have.value", password);
-                    cy.get("@submit").click();
-                    // wait for the token, then get redirected
-                    cy.wait("@token");
-                }
-            );
-        }, // session created
-        {
-            validate: () => {
-                cy.getCookie(`auth0.${Cypress.env("auth0ClientId")}.is.authenticated`)
-                    .then($cookie => {
-                        expect($cookie.value).eq("true");
-                    });
-                cy.getCookie(`_legacy_auth0.${Cypress.env("auth0ClientId")}.is.authenticated`)
-                    .then($cookie => {
-                        expect($cookie.value).eq("true");
-                    });
-            },
-            cacheAcrossSpecs: false
-        }); // blank page
+    cy.env(["auth0Username", "auth0Password", "auth0ClientId"]).then(credentials => {
+        const {auth0Username, auth0Password, auth0ClientId} = credentials;
+        if (username === undefined || password === undefined) {
+            username = auth0Username;
+            password = auth0Password;
+        }
+        cy.session(
+            `${username}-${Cypress.spec.name}`,
+            () => {
+                const {AUTH0} = DATA_TESTID;
+                cy.intercept("POST", TOKEN).as("token");
+                cy.clearAllSessionStorage();
+                cy.clearAllCookies();
+                cy.clearAllLocalStorage();
+                // App landing page redirects to Auth0.
+                cy.visit("/")
+                cy.get(AUTH0.USERNAME).should("be.visible");
+                // Login to Auth0 and receive the token.
+                cy.origin(
+                    Cypress.expose("auth0Domain"),
+                    {args: {username, password, AUTH0}},
+                    ({username, password, AUTH0}) => {
+                        cy.get(AUTH0.SUBMIT).as("submit");
+                        cy.get("@submit").should("be.visible");
+                        cy.get(AUTH0.USERNAME).as("un");
+                        cy.get("@un").clear();
+                        cy.get("@un")
+                            .should("have.value", "");
+                        cy.get("@un")
+                            .type(username, {delay: 50});
+                        cy.get("@un")
+                            .should("have.value", username);
+                        cy.get(AUTH0.PASSWORD).as("pw");
+                        cy.get("@pw").clear();
+                        cy.get("@pw")
+                            .should("have.value", "");
+                        cy.get("@pw")
+                            .type(password, {delay: 50, log: false});
+                        cy.get("@pw")
+                            .should("have.value", password);
+                        cy.get("@submit").click();
+                        // wait for the token, then get redirected
+                        cy.wait("@token");
+                    }
+                );
+            }, // session created
+            {
+                validate: () => {
+                    cy.getCookie(`auth0.${auth0ClientId}.is.authenticated`)
+                        .then($cookie => {
+                            expect($cookie.value).eq("true");
+                        });
+                    cy.getCookie(`_legacy_auth0.${auth0ClientId}.is.authenticated`)
+                        .then($cookie => {
+                            expect($cookie.value).eq("true");
+                        });
+                },
+                cacheAcrossSpecs: false
+            });
+    });// blank page
     cy.get("[data-cy='cypress-logo']").should("be.visible"); // wait for the blank page
 });
