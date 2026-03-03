@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {CompleteOrderControllerApi, GetOrderControllerApi, GetOrdersControllerApi, OrderDto} from '../api/api';
-import {apiExec} from "../api/fetch.ts";
+import {apiExec} from "../shared/api/api-exec.ts";
 
 export const useCompleteOrder = () => {
     const queryClient = useQueryClient();

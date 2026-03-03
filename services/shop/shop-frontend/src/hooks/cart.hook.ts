@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {AddToCartControllerApi, AddToCartRequest, GetCartControllerApi, RemoveFromCartControllerApi} from '../api/api';
-import {apiExec} from "../api/fetch.ts";
+import {apiExec} from "../shared/api/api-exec.ts";
 
 export const useCart = () => {
     return useQuery({

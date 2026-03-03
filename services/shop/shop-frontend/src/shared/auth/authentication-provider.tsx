@@ -1,23 +1,26 @@
 import React, {PropsWithChildren} from 'react';
 import {Auth0Provider, AuthorizationParams} from "@auth0/auth0-react";
+import type {AppRuntimeConfig} from "../runtime-config.ts";
 
-const CLIENT_ID = "22pHgiuTCCLFKHK7SMbWkCzohwar8knS"
-const DOMAIN = "retail-ddd-example.eu.auth0.com"
+type AuthenticationProviderProps = PropsWithChildren & {
+    runtimeConfig: AppRuntimeConfig;
+};
 
-export const AuthenticationProvider: React.FC<PropsWithChildren> = props => {
+export const AuthenticationProvider: React.FC<AuthenticationProviderProps> = ({runtimeConfig, children}) => {
 
     const authorizationParams: AuthorizationParams = {
         redirect_uri: window.location.origin,
+        ...(runtimeConfig.oauthAudience ? {audience: runtimeConfig.oauthAudience} : {}),
     }
 
     return (
         <Auth0Provider
             cacheLocation="localstorage"
             useRefreshTokens={true}
-            domain={DOMAIN}
-            clientId={CLIENT_ID}
+            domain={runtimeConfig.oauthDomain}
+            clientId={runtimeConfig.oauthClientId}
             authorizationParams={authorizationParams}>
-            {props.children}
+            {children}
         </Auth0Provider>
     );
 }

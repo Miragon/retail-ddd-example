@@ -1,0 +1,7 @@
+cloudnative-pg:
+  monitoring:
+    serviceMonitor:
+      enabled: false
+
+  config:
+    clusterWide: true
