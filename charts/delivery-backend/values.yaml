@@ -41,5 +41,5 @@ readinessProbe:
   failureThreshold: 3
 
 env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "prod"
+  - name: SWAGGER_API_ENABLED
+    value: "false"

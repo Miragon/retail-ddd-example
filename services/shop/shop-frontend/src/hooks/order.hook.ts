@@ -7,8 +7,7 @@ export const useCompleteOrder = () => {
 
     return useMutation({
         mutationFn: async () => {
-            const response = await apiExec(CompleteOrderControllerApi, api => api.completeOrder());
-            return response.data;
+            return apiExec(CompleteOrderControllerApi, api => api.completeOrder());
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['cart']});
@@ -24,8 +23,7 @@ export const useOrders = () => {
     return useQuery({
         queryKey: ['orders'],
         queryFn: async () => {
-            const response = await apiExec(GetOrdersControllerApi, api => api.getOrdersByUser());
-            return response.data;
+            return apiExec(GetOrdersControllerApi, api => api.getOrdersByUser());
         },
         staleTime: 60000,
     });
@@ -35,8 +33,7 @@ export const useOrder = (orderId: string) => {
     return useQuery({
         queryKey: ['order', orderId],
         queryFn: async () => {
-            const response = await apiExec(GetOrderControllerApi, api => api.getOrder(orderId));
-            return response.data;
+            return apiExec(GetOrderControllerApi, api => api.getOrder(orderId));
         },
         enabled: !!orderId,
         staleTime: 60000,

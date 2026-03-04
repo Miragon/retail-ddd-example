@@ -13,19 +13,19 @@ ingress:
           pathType: Prefix
 
 env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "local"
-  - name: SPRING_DATASOURCE_URL
+  - name: SWAGGER_API_ENABLED
+    value: "false"
+  - name: ISSUER_URI
+    value: "https://retail-ddd-example.eu.auth0.com/"
+  - name: DATABASE_URL
     value: "jdbc:postgresql://postgres-rw:5432/test"
-  - name: SPRING_DATASOURCE_USERNAME
+  - name: DATABASE_USER
     valueFrom:
       secretKeyRef:
         name: postgres-auth
         key: username
-  - name: SPRING_DATASOURCE_PASSWORD
+  - name: DATABASE_PASSWORD
     valueFrom:
       secretKeyRef:
         name: postgres-auth
         key: password
-  - name: SERVER_PORT
-    value: "8080"

@@ -6,8 +6,7 @@ export const useArticles = () => {
     return useQuery({
         queryKey: ['articles'],
         queryFn: async (): Promise<Array<ArticleDto>> => {
-            const apiResponse = await apiExec(LoadArticlesControllerApi, api => api.loadArticles())
-            return apiResponse.data ?? []
+            return apiExec(LoadArticlesControllerApi, api => api.loadArticles());
         },
     })
 }

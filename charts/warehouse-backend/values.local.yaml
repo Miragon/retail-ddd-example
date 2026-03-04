@@ -14,7 +14,5 @@ ingress:
           pathType: Prefix
 
 env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "local"
-  - name: SERVER_PORT
-    value: "8080"
+  - name: SWAGGER_API_ENABLED
+    value: "false"

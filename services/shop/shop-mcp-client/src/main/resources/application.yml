@@ -1,9 +1,9 @@
 server:
-  port: 8085
+  port: ${SERVER_PORT:8080}
 
 shop:
   backend:
-    url: http://localhost:8081
+    url: ${SHOP_BACKEND_URL:http://localhost:8081}
 
 logging:
   pattern:

@@ -26,7 +26,8 @@ class SecurityConfig {
                 "/swagger-ui/**",
                 "/api/articles/**"
             ).permitAll().anyRequest().authenticated()
-        }.oauth2ResourceServer { oauth2 ->
+        }.cors { }
+            .oauth2ResourceServer { oauth2 ->
             oauth2.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) }
         }.headers { it.frameOptions { options -> options.sameOrigin() } }
             .csrf { it.disable() }

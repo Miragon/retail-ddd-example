@@ -41,17 +41,15 @@ readinessProbe:
   failureThreshold: 3
 
 env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "prod"
-  - name: SPRING_DATASOURCE_URL
-    value: "jdbc:postgresql://postgres-rw:5432/test"
-  - name: SPRING_DATASOURCE_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: postgres-auth
-        key: username
-  - name: SPRING_DATASOURCE_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: postgres-auth
-        key: password
+  - name: SWAGGER_API_ENABLED
+    value: "false"
+  - name: ISSUER_URI
+    value: ""
+  - name: CORS_ALLOWED_ORIGINS
+    value: ""
+  - name: DATABASE_URL
+    value: ""
+  - name: DATABASE_USER
+    value: ""
+  - name: DATABASE_PASSWORD
+    value: ""
