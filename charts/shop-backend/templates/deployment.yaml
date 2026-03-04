@@ -30,7 +30,16 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.env }}
-          env:
-            {{- toYaml . | nindent 12 }}
+          {{- $db := (.Values.application.database | default dict) }}
+          {{- $dbType := (index $db "type" | default "postgres") }}
+          {{- if and (ne $dbType "postgres") (ne $dbType "h2") }}
+          {{- fail (printf "shop-backend: unsupported application.database.type '%s' (allowed: postgres|h2)" $dbType) }}
           {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "shop-backend.fullname" . }}-db-{{ $dbType }}
+          env:
+            - name: SWAGGER_API_ENABLED
+              value: {{ index .Values.application "open-api-specs" "enabled" | quote }}
+            - name: ISSUER_URI
+              value: {{ index .Values.application.security "issuer-uri" | quote }}

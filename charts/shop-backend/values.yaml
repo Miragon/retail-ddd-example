@@ -40,16 +40,13 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
 
-env:
-  - name: SWAGGER_API_ENABLED
-    value: "false"
-  - name: ISSUER_URI
-    value: ""
-  - name: CORS_ALLOWED_ORIGINS
-    value: ""
-  - name: DATABASE_URL
-    value: ""
-  - name: DATABASE_USER
-    value: ""
-  - name: DATABASE_PASSWORD
-    value: ""
+application:
+  database:
+    type: postgres
+    url: ""
+    user: ""
+    password: ""
+  open-api-specs:
+    enabled: false
+  security:
+    issuer-uri: ""

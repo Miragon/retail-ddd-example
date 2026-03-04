@@ -58,3 +58,4 @@ dist/
 ## claude
 .claude
 
+/.gradle-local/

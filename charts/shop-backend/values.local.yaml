@@ -12,20 +12,13 @@ ingress:
         - path: /api
           pathType: Prefix
 
-env:
-  - name: SWAGGER_API_ENABLED
-    value: "false"
-  - name: ISSUER_URI
-    value: "https://retail-ddd-example.eu.auth0.com/"
-  - name: DATABASE_URL
-    value: "jdbc:postgresql://postgres-rw:5432/test"
-  - name: DATABASE_USER
-    valueFrom:
-      secretKeyRef:
-        name: postgres-auth
-        key: username
-  - name: DATABASE_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: postgres-auth
-        key: password
+application:
+  database:
+    type: postgres
+    url: "jdbc:postgresql://postgres-rw:5432/test"
+    user: "test"
+    password: "test"
+  open-api-specs:
+    enabled: false
+  security:
+    issuer-uri: "https://retail-ddd-example.eu.auth0.com/"

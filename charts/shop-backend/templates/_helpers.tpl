@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "shop-backend.name" -}}
+{{- define "shop-backend.name" }}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "shop-backend.fullname" -}}
+{{- define "shop-backend.fullname" }}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,14 +26,14 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "shop-backend.chart" -}}
+{{- define "shop-backend.chart" }}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "shop-backend.labels" -}}
+{{- define "shop-backend.labels" }}
 helm.sh/chart: {{ include "shop-backend.chart" . }}
 {{ include "shop-backend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
@@ -45,7 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "shop-backend.selectorLabels" -}}
+{{- define "shop-backend.selectorLabels" }}
 app.kubernetes.io/name: {{ include "shop-backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

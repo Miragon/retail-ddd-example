@@ -12,13 +12,13 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: ${DATABASE_DRIVER_CLASS_NAME}
   jpa:
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: ${DATABASE_DIALECT}
 
 springdoc:
   api-docs:
