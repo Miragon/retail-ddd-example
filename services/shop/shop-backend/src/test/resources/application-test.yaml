@@ -8,5 +8,9 @@ DATABASE_PASSWORD: ""
 DATABASE_DRIVER_CLASS_NAME: org.h2.Driver
 DATABASE_DIALECT: org.hibernate.dialect.H2Dialect
 
-CORS_ALLOWED_ORIGINS: http://localhost
 SWAGGER_API_ENABLED: false
+
+sample-data:
+  enabled: true
+  locations:
+    - classpath:db/testdata

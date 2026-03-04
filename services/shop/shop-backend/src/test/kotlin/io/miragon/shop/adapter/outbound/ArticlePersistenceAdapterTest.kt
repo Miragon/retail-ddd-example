@@ -1,18 +1,21 @@
 package io.miragon.shop.adapter.outbound
 
 import io.miragon.shop.adapter.outbound.persistence.article.ArticlePersistenceAdapter
+import io.miragon.shop.adapter.outbound.persistence.flyway.SampleDataFlywayConfig
 import io.miragon.shop.domain.article.ArticleId
 import io.miragon.shop.domain.article.testArticle
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 import org.springframework.context.annotation.Import
-import org.springframework.test.context.jdbc.Sql
 
 @DataJpaTest
-@Import(ArticlePersistenceAdapter::class)
+@ImportAutoConfiguration(FlywayAutoConfiguration::class)
+@Import(ArticlePersistenceAdapter::class, SampleDataFlywayConfig::class)
 class ArticlePersistenceAdapterTest {
 
     @Autowired
@@ -22,7 +25,6 @@ class ArticlePersistenceAdapterTest {
     private lateinit var entityManager: TestEntityManager
 
     @Test
-    @Sql("/articles.sql")
     fun `should load all articles from database`() {
         // when
         val articles = adapter.loadAll()
@@ -63,14 +65,15 @@ class ArticlePersistenceAdapterTest {
 
         // then
         val loadedArticles = adapter.loadAll()
-        assertThat(loadedArticles).hasSize(1)
-        assertThat(loadedArticles[0]).usingRecursiveComparison().isEqualTo(
-            testArticle(
-                id = article.id,
-                name = article.name.value,
-                description = article.description.value,
-                price = article.price.value
+        assertThat(loadedArticles).anySatisfy { loadedArticle ->
+            assertThat(loadedArticle).usingRecursiveComparison().isEqualTo(
+                testArticle(
+                    id = article.id,
+                    name = article.name.value,
+                    description = article.description.value,
+                    price = article.price.value
+                )
             )
-        )
+        }
     }
 } 

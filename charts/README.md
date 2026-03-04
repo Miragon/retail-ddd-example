@@ -25,6 +25,7 @@ kubectl config use-context retail-example
 ## 2) Projekt bauen und Images in Minikube bauen
 
 ```bash
+cd ..
 ./gradlew build
 npm --prefix services/shop/shop-frontend run build
 
@@ -37,8 +38,6 @@ minikube -p retail-example image build -t shop-frontend:local -f services/shop/s
 ## 3) Infrastruktur deployen (CNPG Operator -> Postgres -> Traefik)
 
 ```bash
-cd charts
-
 helm dependency build ./infrastructure/cnpg-operator
 helm upgrade --install cnpg ./infrastructure/cnpg-operator \
   --namespace cnpg-operator \

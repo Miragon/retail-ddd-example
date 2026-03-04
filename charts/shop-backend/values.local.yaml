@@ -20,5 +20,7 @@ application:
     password: "test"
   open-api-specs:
     enabled: false
+  sample-data:
+    enabled: true
   security:
     issuer-uri: "https://retail-ddd-example.eu.auth0.com/"

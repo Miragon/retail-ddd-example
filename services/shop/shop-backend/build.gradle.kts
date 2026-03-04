@@ -11,6 +11,8 @@ dependencies {
     implementation(libs.bundles.security)
     implementation(libs.bundles.database)
     implementation(libs.bundles.openApi)
+    implementation("org.springframework.boot:spring-boot-starter-flyway")
+    runtimeOnly("org.flywaydb:flyway-database-postgresql")
     testImplementation(libs.bundles.commonTest)
     testRuntimeOnly(libs.h2)
 }

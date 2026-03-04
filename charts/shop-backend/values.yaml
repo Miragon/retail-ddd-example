@@ -48,5 +48,7 @@ application:
     password: ""
   open-api-specs:
     enabled: false
+  sample-data:
+    enabled: false
   security:
     issuer-uri: ""

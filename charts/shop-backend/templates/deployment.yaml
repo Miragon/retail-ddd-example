@@ -41,5 +41,7 @@ spec:
           env:
             - name: SWAGGER_API_ENABLED
               value: {{ index .Values.application "open-api-specs" "enabled" | quote }}
+            - name: DATABASE_SAMPLE_DATA_ENABLED
+              value: {{ index .Values.application "sample-data" "enabled" | quote }}
             - name: ISSUER_URI
               value: {{ index .Values.application.security "issuer-uri" | quote }}
