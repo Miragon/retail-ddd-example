@@ -47,6 +47,7 @@ bin/
 # Frontend
 .vite
 node_modules
+dist/
 
 ### Helm ###
 /charts/**/charts/
@@ -56,3 +57,5 @@ node_modules
 
 ## claude
 .claude
+
+/.gradle-local/

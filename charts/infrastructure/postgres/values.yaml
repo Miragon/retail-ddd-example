@@ -1,0 +1,26 @@
+cluster:
+  name: postgres
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.1
+
+  storage:
+    size: 8Gi
+    # storageClass: ""
+
+  bootstrap:
+    database: test
+    owner: test
+    secretName: postgres-auth
+
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "256MB"

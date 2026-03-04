@@ -1,22 +1,18 @@
-# Local development values for warehouse-backend
-# Override production values for local development
-
 image:
-  tag: "local"
-
-service:
-  type: LoadBalancer
+  pullPolicy: Never
 
 ingress:
   enabled: true
+  stripPrefix:
+    enabled: true
+    prefixes:
+      - /warehouse
   hosts:
-    - host: warehouse-backend.local
+    - host: localhost
       paths:
-        - path: /
-          pathType: ImplementationSpecific
+        - path: /warehouse
+          pathType: Prefix
 
 env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "local"
-  - name: SERVER_PORT
-    value: "8080"
+  - name: SWAGGER_API_ENABLED
+    value: "false"

@@ -1,94 +1,106 @@
-# Local Kubernetes Setup with Minikube & Helm
+# Local Kubernetes Setup with Minikube, Helm, Traefik and CNPG
 
-This setup mirrors our cloud environment using Helm charts and Minikube.
-Configurations are always versioned with the chart.
+Dieser Setup läuft komplett hinter Traefik. Zugriff erfolgt über:
+
+- Frontend: `http://localhost:8080/`
+- Shop Backend: `http://localhost:8080/api/...`
+- Warehouse Backend: `http://localhost:8080/warehouse/...`
+- Delivery Backend: `http://localhost:8080/delivery/...`
 
 ## Prerequisites
 
 - Docker
-- Minikube (with docker driver)
+- Minikube (docker driver)
 - kubectl
 - Helm
 
-## Start Minikube
+## 1) Minikube starten
 
 ```bash
-# You may need to set a specific driver
 minikube config set driver docker
-
-# Start Minikube with the Docker driver
-minikube start
+minikube start -p retail-example
+kubectl config use-context retail-example
 ```
 
-## Build Images inside Minikube
-
-Before deploying, you need to build the project
+## 2) Projekt bauen und Images in Minikube bauen
 
 ```bash
-# Build the Gradle project
+cd ..
 ./gradlew build
+npm --prefix services/shop/shop-frontend run build
+
+minikube -p retail-example image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
+minikube -p retail-example image build -t delivery-backend:local -f services/delivery/delivery-backend/Dockerfile .
+minikube -p retail-example image build -t warehouse-backend:local -f services/warehouse/warehouse-backend/Dockerfile .
+minikube -p retail-example image build -t shop-frontend:local -f services/shop/shop-frontend/Dockerfile .
 ```
 
-After that, you can build the Docker images directly in Minikube:
+## 3) Infrastruktur deployen (CNPG Operator -> Postgres -> Traefik)
 
 ```bash
-# Build backend images
-minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
-minikube image build -t delivery-backend:local -f services/delivery/delivery-backend/Dockerfile .
-minikube image build -t warehouse-backend:local -f services/warehouse/warehouse-backend/Dockerfile .
+helm dependency build ./infrastructure/cnpg-operator
+helm upgrade --install cnpg ./infrastructure/cnpg-operator \
+  --namespace cnpg-operator \
+  --create-namespace \
+  -f infrastructure/cnpg-operator/values.yaml
 
-# Build frontend image
-minikube image build -t shop-frontend:local -f services/shop/shop-frontend/Dockerfile .
+kubectl create namespace retail-local
+kubectl apply -f local_secrets/postgres-secret.yaml
+
+helm upgrade --install postgres ./infrastructure/postgres \
+  --namespace retail-local \
+  -f infrastructure/postgres/values.yaml 
+
+helm dependency build ./infrastructure/traefik
+helm upgrade --install traefik ./infrastructure/traefik \
+  --namespace traefik \
+  --create-namespace \
+  -f infrastructure/traefik/values.yaml 
 ```
 
-Moreover you may need to build the Postgres image:
+## 4) Services deployen
 
 ```bash
-cd charts/postgres
-helm repo add charts https://charts.bitnami.com/bitnami
-helm dependency build
+helm upgrade --install shop-backend ./shop-backend \
+  --namespace retail-local \
+  -f ./shop-backend/values.local.yaml
+
+helm upgrade --install delivery-backend ./delivery-backend \
+  --namespace retail-local \
+  -f ./delivery-backend/values.local.yaml
+
+helm upgrade --install warehouse-backend ./warehouse-backend \
+  --namespace retail-local \
+  -f ./warehouse-backend/values.local.yaml
+
+helm upgrade --install shop-frontend ./shop-frontend \
+  --namespace retail-local \
+  -f ./shop-frontend/values.local.yaml
 ```
 
-## Deploy with Helm
+## 5) Zugriff aktivieren
 
-To install all charts at once:
+Traefik läuft als `LoadBalancer` auf Port `8080` (Services routen intern per Traefik IngressRoute):
 
 ```bash
-# Install infrastructure first
-cd ..
-helm upgrade --install postgres ./postgres
-
-# Install all backend applications
-helm upgrade --install shop-backend ./shop-backend --values ./shop-backend/values.local.yaml
-helm upgrade --install delivery-backend ./delivery-backend --values ./delivery-backend/values.local.yaml
-helm upgrade --install warehouse-backend ./warehouse-backend --values ./warehouse-backend/values.local.yaml
-
-# Install frontend 
-helm upgrade --install shop-frontend ./shop-frontend --values ./shop-frontend/values.local.yaml
+minikube tunnel -p retail-example
 ```
 
-## Access Services
-
-- Start tunnel (for LoadBalancer services):
+## 6) Routing testen
 
 ```bash
-cd ..
-minikube tunnel
+curl http://localhost:8080/
+curl http://localhost:8080/api/articles
+curl http://localhost:8080/warehouse/api/articles
+curl http://localhost:8080/delivery/api/articles
 ```
-- If there are issues with the tunnel, one could use port forwarding:
+
+## Nützliche Befehle
 
 ```bash
-kubectl port-forward service/postgres-postgresql 5432:5432
-kubectl port-forward service/shop-frontend 8080:8080
+minikube list profiles
+kubectl get pods -A
+kubectl get svc -A
+kubectl get ingressroute -n retail-local
+kubectl get middleware -n retail-local
 ```
-
-## 🔍 Useful Commands
-
-```bash
-kubectl get pods
-kubectl get services
-kubectl logs -f <pod-name>
-minikube dashboard
-minikube service list
-```
-

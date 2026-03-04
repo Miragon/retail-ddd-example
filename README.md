@@ -95,6 +95,56 @@ Within this monorepo, we are using a variety of technologies to keep things inte
    helm upgrade --install shop-backend ./shop-backend --values ./shop-backend/values.local.yaml
    ```
 
+## 🔐 Auth0 Setup (Account, Client, Users)
+
+If you want to run OAuth with your own Auth0 tenant, use this flow:
+
+1. Create an Auth0 account and tenant
+   - Go to `https://auth0.com/` and create a free account
+   - Create a tenant (domain looks like `your-tenant.eu.auth0.com` or `your-tenant.us.auth0.com`)
+
+2. Create an API (optional but recommended)
+   - Auth0 Dashboard -> `Applications` -> `APIs` -> `Create API`
+   - Example:
+     - Name: `Retail API`
+     - Identifier (Audience): `https://retail-ddd-example.api`
+   - Save the API
+
+3. Create a frontend client (Single Page Application)
+   - Auth0 Dashboard -> `Applications` -> `Applications` -> `Create Application`
+   - Type: `Single Page Application`
+   - In the app settings, configure for local usage:
+     - Allowed Callback URLs: `http://localhost:5173, http://localhost:8080`
+     - Allowed Logout URLs: `http://localhost:5173, http://localhost:8080`
+     - Allowed Web Origins: `http://localhost:5173, http://localhost:8080`
+   - Save and copy:
+     - `Domain` (your tenant domain)
+     - `Client ID`
+
+4. Create users
+   - Auth0 Dashboard -> `User Management` -> `Users` -> `Create User`
+   - Use the default database connection (`Username-Password-Authentication`) or your own connection
+   - Ensure this connection is enabled for your SPA application
+
+5. Wire Auth0 values into this project
+   - Frontend local runtime config:
+     - [services/shop/shop-frontend/public/app.env](services/shop/shop-frontend/public/app.env)
+     - Set:
+       - `OAUTH_ENABLED=true`
+       - `OAUTH_DOMAIN=<your-tenant-domain>`
+       - `OAUTH_CLIENT_ID=<your-client-id>`
+       - `OAUTH_AUDIENCE=<your-api-identifier>` (or empty, depending on your token setup)
+   - Shop backend local issuer:
+     - [services/shop/shop-backend/src/main/resources/application-dev.yml](services/shop/shop-backend/src/main/resources/application-dev.yml)
+     - Set `SECURITY_OAUTH2_ISSUER_URI=https://<your-tenant-domain>/`
+
+6. Wire Auth0 values for Helm/Minikube
+   - Frontend Helm values:
+     - [charts/shop-frontend/values.local.yaml](charts/shop-frontend/values.local.yaml)
+   - Backend Helm values:
+     - [charts/shop-backend/values.local.yaml](charts/shop-backend/values.local.yaml)
+   - Set the same domain/client/issuer values there before `helm upgrade --install`
+
 ## 🏗️ Architecture: It's Hexagonal, Darling
 
 Each service follows the **Hexagonal Architecture** pattern because circles are overrated.

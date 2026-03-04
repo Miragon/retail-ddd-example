@@ -1,22 +1,18 @@
-# Local development values for delivery-backend
-# Override production values for local development
-
 image:
-  tag: "local"
-
-service:
-  type: LoadBalancer
+  pullPolicy: Never
 
 ingress:
   enabled: true
+  stripPrefix:
+    enabled: true
+    prefixes:
+      - /delivery
   hosts:
-    - host: delivery-backend.local
+    - host: localhost
       paths:
-        - path: /
-          pathType: ImplementationSpecific
+        - path: /delivery
+          pathType: Prefix
 
 env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "local"
-  - name: SERVER_PORT
-    value: "8080"
+  - name: SWAGGER_API_ENABLED
+    value: "false"

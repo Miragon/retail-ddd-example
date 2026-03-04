@@ -6,3 +6,7 @@ buildSrc
 .idea
 .vscode
 *.log
+
+# Node artifacts
+**/node_modules
+**/dist

@@ -1,0 +1,16 @@
+SERVER_PORT: 0
+
+ISSUER_URI: https://retail-ddd-example.eu.auth0.com/
+
+DATABASE_URL: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+DATABASE_USER: sa
+DATABASE_PASSWORD: ""
+DATABASE_DRIVER_CLASS_NAME: org.h2.Driver
+DATABASE_DIALECT: org.hibernate.dialect.H2Dialect
+
+SWAGGER_API_ENABLED: false
+
+sample-data:
+  enabled: true
+  locations:
+    - classpath:db/testdata

@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -9,8 +9,14 @@ COPY services/shop/shop-frontend/package*.json ./
 # Install dependencies
 RUN npm ci
 
-# Copy source code
-COPY services/shop/shop-frontend/ ./
+# Copy only build-relevant sources
+COPY services/shop/shop-frontend/src ./src
+COPY services/shop/shop-frontend/public ./public
+COPY services/shop/shop-frontend/index.html ./
+COPY services/shop/shop-frontend/vite.config.ts ./
+COPY services/shop/shop-frontend/tsconfig.json ./
+COPY services/shop/shop-frontend/eslint.config.js ./
+COPY services/shop/shop-frontend/openapitools.json ./
 
 # Build the application
 RUN npm run build

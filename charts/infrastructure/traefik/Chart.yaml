@@ -1,0 +1,10 @@
+apiVersion: v2
+name: traefik
+description: Wrapper chart to install Traefik ingress controller
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: traefik
+    version: ">=34.0.0 <35.0.0"
+    repository: "https://traefik.github.io/charts"

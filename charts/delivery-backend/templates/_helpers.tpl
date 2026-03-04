@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "delivery-backend.name" -}}
+{{- define "delivery-backend.name" }}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "delivery-backend.fullname" -}}
+{{- define "delivery-backend.fullname" }}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,14 +26,14 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "delivery-backend.chart" -}}
+{{- define "delivery-backend.chart" }}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "delivery-backend.labels" -}}
+{{- define "delivery-backend.labels" }}
 helm.sh/chart: {{ include "delivery-backend.chart" . }}
 {{ include "delivery-backend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
@@ -45,18 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "delivery-backend.selectorLabels" -}}
+{{- define "delivery-backend.selectorLabels" }}
 app.kubernetes.io/name: {{ include "delivery-backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "delivery-backend.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "delivery-backend.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
 {{- end }}

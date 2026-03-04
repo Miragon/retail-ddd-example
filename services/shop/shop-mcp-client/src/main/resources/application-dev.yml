@@ -1,0 +1,2 @@
+SERVER_PORT: 8085
+SHOP_BACKEND_URL: http://localhost:8081

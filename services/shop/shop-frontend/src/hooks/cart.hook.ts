@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {AddToCartControllerApi, AddToCartRequest, GetCartControllerApi, RemoveFromCartControllerApi} from '../api/api';
-import {apiExec} from "../api/fetch.ts";
+import {apiExec} from "../shared/api/api-exec.ts";
 
 export const useCart = () => {
     return useQuery({
@@ -8,8 +8,7 @@ export const useCart = () => {
         retry: false,
         staleTime: 30000,
         queryFn: async () => {
-            const response = await apiExec(GetCartControllerApi, api => api.getCart());
-            return response.data;
+            return apiExec(GetCartControllerApi, api => api.getCart());
         },
     });
 };
@@ -19,8 +18,7 @@ export const useAddToCart = () => {
 
     return useMutation({
         mutationFn: async (request: AddToCartRequest) => {
-            const response = await apiExec(AddToCartControllerApi, api => api.addToCart(request));
-            return response.data;
+            return apiExec(AddToCartControllerApi, api => api.addToCart(request));
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['cart']});
@@ -36,8 +34,7 @@ export const useRemoveFromCart = () => {
 
     return useMutation({
         mutationFn: async (articleId: string) => {
-            const response = await apiExec(RemoveFromCartControllerApi, api => api.removeFromCart(articleId));
-            return response.data;
+            return apiExec(RemoveFromCartControllerApi, api => api.removeFromCart(articleId));
         },
         onSuccess: () => {
             // Invalidate cart query to refetch updated cart

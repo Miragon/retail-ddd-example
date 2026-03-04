@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "warehouse-backend.name" -}}
+{{- define "warehouse-backend.name" }}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "warehouse-backend.fullname" -}}
+{{- define "warehouse-backend.fullname" }}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,14 +26,14 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "warehouse-backend.chart" -}}
+{{- define "warehouse-backend.chart" }}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "warehouse-backend.labels" -}}
+{{- define "warehouse-backend.labels" }}
 helm.sh/chart: {{ include "warehouse-backend.chart" . }}
 {{ include "warehouse-backend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
@@ -45,18 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "warehouse-backend.selectorLabels" -}}
+{{- define "warehouse-backend.selectorLabels" }}
 app.kubernetes.io/name: {{ include "warehouse-backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "warehouse-backend.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "warehouse-backend.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
 {{- end }}

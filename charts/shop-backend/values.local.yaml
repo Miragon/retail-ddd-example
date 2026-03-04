@@ -1,28 +1,26 @@
-# Local development values for shop-backend
-# Override production values for local development
-
 image:
-  tag: "local"
-
-service:
-  type: LoadBalancer
+  pullPolicy: Never
 
 ingress:
   enabled: true
+  stripPrefix:
+    enabled: false
+    prefixes: []
   hosts:
-    - host: shop-backend.local
+    - host: localhost
       paths:
-        - path: /
-          pathType: ImplementationSpecific
+        - path: /api
+          pathType: Prefix
 
-env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: "local"
-  - name: SPRING_DATASOURCE_URL
-    value: "jdbc:postgresql://postgres-postgresql:5432/test"
-  - name: SPRING_DATASOURCE_USERNAME
-    value: "test"
-  - name: SPRING_DATASOURCE_PASSWORD
-    value: "test"
-  - name: SERVER_PORT
-    value: "8080"
+application:
+  database:
+    type: postgres
+    url: "jdbc:postgresql://postgres-rw:5432/test"
+    user: "test"
+    password: "test"
+  open-api-specs:
+    enabled: false
+  sample-data:
+    enabled: true
+  security:
+    issuer-uri: "https://retail-ddd-example.eu.auth0.com/"
