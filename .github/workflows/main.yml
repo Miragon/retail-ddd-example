@@ -50,12 +50,12 @@ jobs:
 
       # ──────────────── DOCKER BUILD ───────────────
       - name: Set up Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
 
       # ──────────────── HELM PACKAGE ───────────────
       - name: Install Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
 
       - name: Package Helm charts with same version
         run: |
