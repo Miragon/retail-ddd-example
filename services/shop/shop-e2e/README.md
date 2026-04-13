@@ -130,6 +130,20 @@ All test selectors are centralized in `support/commands.ts` under the `DATA_TEST
 - `DATA_TESTID.SHOP_CART.*` - Shopping cart elements
 - `DATA_TESTID.SHOP_ORDERS.*` - Order management elements
 
+### Handling Optional UI Elements
+
+Some UI elements can appear only in specific states (for example empty vs. non-empty orders overview).  
+To avoid flaky failures, check for existence before clicking optional elements:
+
+```typescript
+cy.get("body").then(($body) => {
+  const selector = `[data-testid="${SHOP_ORDERS.EMPTY.BUTTON_CONTINUE_SHOPPING}"]`;
+  if ($body.find(selector).length) {
+    cy.get(selector).click();
+  }
+});
+```
+
 ### Page Routes
 
 Page paths are defined in `support/commands.ts` under the `PAGE` constant:
@@ -146,6 +160,38 @@ Each test typically follows this pattern:
 2. **Navigate**: Visit the target page
 3. **Interact**: Perform actions (click, type, select)
 4. **Assert**: Verify expected outcomes
+
+## Test Specifications
+
+Detailed test specifications are documented per suite in `Testspecifications/`.
+
+### Suite Index
+
+- [basic.spec.ts](Testspecifications/basic.md) - Shop menubar flows (`#prb`, `#ctn`, `#unn`, `#pjz`, `#izv`)
+
+### Coverage Summary
+
+- Authentication (Auth0 login/logout)
+- Navigation menu interactions
+- Shopping cart CRUD operations
+- Order creation and confirmation
+- Multi-article cart management
+
+### Required Test Data
+
+| Article Name | Article ID | Used In Tests |
+|-------------|-----------|---------------|
+| Samsung 980 PRO 1TB SSD | `f2b5c8a0-1d3e-4c5b-9f3e-7d6f8a2b1c3d` | #unn |
+| Dell XPS 15 Laptop | `a1b2c3d4-e5f6-4a5b-9c8d-7e6f5a4b3c2d` | #ctn |
+| Keychron K2 Mechanical Keyboard | `d7e9a1e0-1234-4c5b-9876-abcdef123456` | #pjz |
+| LG 34WN80C-B UltraWide Monitor | `d4e5f6a7-b8c9-7d8e-2f3a-1b2c3d4e5f6a` | #izv |
+| Sony WH-1000XM5 Headphones | `0f5e45d3-aaa3-4cde-a1b2-9e8f0d1a2b3c` | #izv |
+
+When adding a new suite:
+
+1. Create `Testspecifications/<suite-name>.md`.
+2. Add the suite link under `Suite Index` in this README.
+3. Update required test data if new fixtures/articles are needed.
 
 ## Troubleshooting
 

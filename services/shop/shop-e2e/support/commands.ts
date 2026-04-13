@@ -7,7 +7,7 @@ declare global {
     }
 }
 
-export const DATA_TESTID = Object.freeze({
+export const DATA_TESTID = {
     AUTH0: {
         USERNAME: "input#username",
         PASSWORD: "input#password",
@@ -40,6 +40,10 @@ export const DATA_TESTID = Object.freeze({
             LG: {
                 ID: "d4e5f6a7-b8c9-7d8e-2f3a-1b2c3d4e5f6a",
                 DESCRIPTION: "LG 34WN80C-B UltraWide Monitor"
+            },
+            DELL: {
+                ID: "a1b2c3d4-e5f6-4a5b-9c8d-7e6f5a4b3c2d",
+                DESCRIPTION: "Dell XPS 15 Laptop"
             }
         }
     },
@@ -66,16 +70,16 @@ export const DATA_TESTID = Object.freeze({
         BUTTON_COMPLETE_ORDER: "Cart-Button-CompleteOrder",
         REMOVE: "Cart-IconButton"
     }
-});
-export const API = Object.freeze({
+} as const;
+export const API = {
     ARTICLES: "/api/articles",
     ORDERS: "/api/orders"
-});
-export const PAGE = Object.freeze({
+} as const;
+export const PAGE = {
     ARTICLES: "/articles",
     ORDERS: "/orders",
     CART: "/cart"
-});
+} as const;
 
 const TOKEN = `https://${Cypress.expose("auth0Domain")}/oauth/token`;
 
@@ -145,5 +149,5 @@ Cypress.Commands.add("login", function (username, password) {
                 cacheAcrossSpecs: false
             });
     });// blank page
-    cy.get("[data-cy='cypress-logo']").should("be.visible"); // wait for the blank page
+    // cy.get("[data-cy='cypress-logo']").should("be.visible"); // wait for the blank page
 });

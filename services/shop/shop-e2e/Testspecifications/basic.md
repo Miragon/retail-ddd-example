@@ -26,19 +26,6 @@
 
 ---
 
-### Test #ctn - Navigate to Orders
-**Action:** User navigates to the orders overview page
-**Steps:**
-1. Click "Orders" button in navigation menu
-2. Orders page loads
-
-**Verification:**
-- Orders overview root element is visible
-
-**Test Data:** None required
-
----
-
 ### Test #unn - Add Article to Cart
 **Action:** User adds a single article to the shopping cart
 **Steps:**
@@ -70,6 +57,25 @@
 **Test Data:**
 - Article: Keychron K2 Mechanical Keyboard
 - Article ID: `d7e9a1e0-1234-4c5b-9876-abcdef123456`
+
+---
+
+### Test #ctn - Navigate to Orders
+**Action:** User navigates to the orders overview page
+**Steps:**
+1. Add Dell XPS 15 Laptop to cart
+2. Navigate to cart page
+3. Complete an order to ensure at least one order exists
+4. Click "Orders" button in navigation menu
+5. If the empty-state "Continue Shopping" button exists, click it
+6. Orders page loads
+
+**Verification:**
+- Orders overview root element is visible
+
+**Test Data:**
+- Article: Dell XPS 15 Laptop
+- Article ID: `a1b2c3d4-e5f6-4a5b-9c8d-7e6f5a4b3c2d`
 
 ---
 
@@ -110,6 +116,7 @@ All tests depend on:
   - Keychron K2 Mechanical Keyboard
   - LG 34WN80C-B UltraWide Monitor
   - Sony WH-1000XM5 Headphones
+  - Dell XPS 15 Laptop
 
 ## Notes
 
