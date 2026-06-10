@@ -134,45 +134,29 @@ Each service implements its own article repository following the same domain mod
 
 ## Local Development Setup
 
-1. **Start infrastructure:**
+### Parallel-Dev (mehrere Checkouts, portless)
+
+Einmalig pro Checkout: `npm --prefix scripts install` (installiert portless lokal).
 
 ```bash
-cd charts
-minikube start
-helm upgrade --install postgres ./postgres
+npm --prefix scripts run dev        # Compose-Stack + alle Backends/Vite via portless
+npm --prefix scripts run dev:down   # Stack stoppen
 ```
 
-2. **Build and deploy services:**
+Pro Branch-Checkout entstehen branch-spezifische URLs (`http://app.<slug>.localhost:1355`,
+`http://shop.<slug>.localhost:1355`, ...) und ein eigener Compose-Stack (Postgres +
+Keycloak) auf hash-derivierten Ports. Zwei Worktrees auf unterschiedlichen
+Branches laufen so kollisionsfrei parallel. Details: `stack/README.md`.
 
-**Build images in minikube:**
+### Klassisch (single-clone, ohne portless)
 
 ```bash
-minikube image build -t shop-backend:local -f services/shop/shop-backend/Dockerfile .
+SPRING_PROFILES_ACTIVE=dev ./gradlew :services:shop:shop-backend:bootRun
 ```
 
-```bash
-minikube image build -t delivery-backend:local -f services/delivery/delivery-backend/Dockerfile .
-```
-
-```bash
-minikube image build -t warehouse-backend:local -f services/warehouse/warehouse-backend/Dockerfile .
-```
-
-```bash
-minikube image build -t shop-frontend:local -f services/shop/shop-frontend/Dockerfile .
-```
-
-**Deploy with Helm:**
-
-```bash
-helm upgrade --install shop-backend ./shop-backend --values ./shop-backend/values.local.yaml
-```
-
-3. **Access services:**
-
-```bash
-minikube tunnel  # Enable LoadBalancer access
-```
+Backend hängt sich an die festen dev-Ports (8081/8082/8083/8085). Postgres und
+Keycloak müssen separat aufgesetzt werden (oder Helm/Minikube, siehe
+`charts/README.md`).
 
 ## Testing Strategy
 

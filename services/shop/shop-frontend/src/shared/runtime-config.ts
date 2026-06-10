@@ -55,12 +55,21 @@ export const initRuntimeConfig = async (): Promise<AppRuntimeConfig> => {
 
     const parsed = parseEnvFile(await response.text());
     runtimeConfig = {
-        keycloakUrl: requireConfigValue(parsed, "KEYCLOAK_URL"),
+        keycloakUrl: resolveKeycloakUrl(requireConfigValue(parsed, "KEYCLOAK_URL")),
         keycloakRealm: requireConfigValue(parsed, "KEYCLOAK_REALM"),
         keycloakClientId: requireConfigValue(parsed, "KEYCLOAK_CLIENT_ID"),
     };
 
     return runtimeConfig;
+}
+
+// "auto" derives the Keycloak URL from the current frontend host by swapping
+// the leading "app." subdomain for "auth." — convention used by the
+// portless-based parallel-dev setup (see stack/README.md).
+const resolveKeycloakUrl = (raw: string): string => {
+    if (raw !== "auto") return raw;
+    const host = window.location.host.replace(/^app\./, "auth.");
+    return `${window.location.protocol}//${host}`;
 }
 
 type RuntimeConfigGateProps = {
